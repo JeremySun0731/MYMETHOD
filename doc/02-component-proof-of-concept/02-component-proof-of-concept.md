@@ -53,7 +53,7 @@ to the tree diagram (you may remove this one as well):
 
 ## Assignment Learning Objectives
 
-<!-- TODO: read the assignment learning objectives then delete this comment -->
+
 
 Without learning objectives, there really is no clear reason why a particular
 assessment or activity exists. Therefore, to be completely transparent, here is
@@ -68,7 +68,7 @@ project. Specifically, students should be able to:
 
 ## Assignment Rubric: 10 Points
 
-<!-- TODO: read the assignment rubric then delete this comment -->
+
 
 Again, to be completely transparent, most of the portfolio project, except the
 final submission, is designed as a formative assessment. Formative assessments
@@ -114,8 +114,12 @@ Below is further rationale/explanation for the rubric items above:
 > to create a new design. In you do end up picking one at random, you should
 > disclose that here as well.
 
-<!-- TODO: briefly argue your choice of design or design something
-new; then delete this comment -->
+
+
+I chose to implement the **Polynomial** component for this assignment.
+This component will represent a mathematical polynomial using a `Map<Integer, Integer>` structure,where the key represents the **degree** of each term and the value represents the **coefficient**.I decided to use a `Map` because it provides an efficient way to store and access polynomial terms, especially when the polynomial is sparse or when we need to perform operations like addition or multiplication.This design allows quick lookup and update of coefficients based on the degree.I also learned about `Map` in the course CSE 2231,so I want to use this project as an opportunity to review and reinforce that knowledge through practical implementation. Additionally, I believe this approach will make it easier to extend the program later,  for example by adding support for differentiation, integration, or simplification of polynomials.
+
+
 
 > Once you've argued your choice of design, make a branch in your new repo called
 > something like `proof-of-concept`. There are many ways to do this, but my
@@ -126,7 +130,7 @@ new; then delete this comment -->
 > we'll want a branch that you can later make a pull request from with all
 > your changes.
 
-<!-- TODO: make a new branch from main then delete this comment -->
+
 
 ## Assignment Tasks
 
