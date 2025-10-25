@@ -8,6 +8,15 @@ the following form: YYYY.0M.0D.
 
 ## [Unreleased]
 
+#### [2025.10.24]
+##### Added
+- Created `Polynomial.java` for the proof-of-concept assignment.
+- Implemented polynomial addition and string output.
+- Demonstrated functionality in the `main()` method.
+
+##### Changed
+- Updated component design to follow project requirements.
+
 ## [2024.12.30]
 
 - Added table-based rubrics to all 6 parts of the project
