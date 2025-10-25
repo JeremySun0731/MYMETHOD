@@ -11,7 +11,7 @@ public class Polynomial {
     private Map<Integer, Integer> polynomial;
 
     /**
-     *
+     * initialize the map.
      */
     public Polynomial() {
         this.polynomial = new Map1L<>();
@@ -29,6 +29,18 @@ public class Polynomial {
         if (this.polynomial.hasKey(degree)) {
             this.polynomial.replaceValue(degree, value);
         }
+    }
+
+    /**
+     *
+     * @param args
+     */
+    public int getCoefficient(int degree) {
+        int coefficient = 0;
+        if (this.polynomial.hasKey(degree)) {
+            coefficient = this.polynomial.value(degree);
+        }
+        return coefficient;
     }
 
     /**
