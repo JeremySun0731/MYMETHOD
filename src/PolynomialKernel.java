@@ -9,6 +9,20 @@ public interface PolynomialKernel extends Standard<Polynomial> {
     void newPolynomial();
 
     /**
+     * Inserts a term in this polynomial.
+     *
+     * <p>
+     * a new term is added.
+     * </p>
+     *
+     * @param degree
+     *            the degree (exponent) of the term to insert or update
+     * @param value
+     *            the coefficient of the term
+     */
+    public void put(int degree, int value);
+
+    /**
      * change the known coefficient of the specific degree
      *
      * @param degree
