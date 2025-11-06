@@ -7,6 +7,16 @@ and this project adheres to [Calendar Versioning](https://calver.org/) of
 the following form: YYYY.0M.0D.
 
 ## [Unreleased]
+#### [2025.11.06]
+### Added
+- Created `PolynomialKernel.java` interface file.
+- Created `Polynomial1.java` enhanced interface file.
+- Added full method signatures for kernel and enhanced methods (no implementations).
+- Added Javadoc-style comments (`@param`, `@return`, `@ensures`) to interface methods.
+### Documentation
+- Updated `03-component-interfaces.md` with kernel and enhanced methods.
+- Added hierarchy diagram for Polynomial component.
+- Answered Additional Considerations (mutability, internal data structures, constants).
 
 #### [2025.10.24]
 ##### Added
