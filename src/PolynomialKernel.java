@@ -1,5 +1,24 @@
 import components.standard.Standard;
 
+/**
+ * Kernel interface for mutable polynomials.
+ *
+ * <p>
+ * This interface defines the primary (low-level) operations for manipulating a
+ * polynomial, including setting coefficients, inserting new terms, and
+ * retrieving coefficient values. These methods are intended to be used by the
+ * enhanced {@code Polynomial} interface.
+ * </p>
+ *
+ * <p>
+ * All polynomials are assumed to be of the form:
+ * </p>
+ * <pre>
+ *     a_n * x^n + a_{n-1} * x^{n-1} + ... + a_1 * x + a_0
+ * </pre> where each coefficient {@code a_i} is an integer, and only
+ * non-negative integer degrees are allowed.
+ * </p>
+ */
 public interface PolynomialKernel extends Standard<Polynomial> {
     /**
      * Creates a new (empty) polynomial.
@@ -20,10 +39,10 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      * @param value
      *            the coefficient of the term
      */
-    public void put(int degree, int value);
+    void put(int degree, int value);
 
     /**
-     * change the known coefficient of the specific degree
+     * change the known coefficient of the specific degree.
      *
      * @param degree
      *            the target degree of polynomial
@@ -34,7 +53,7 @@ public interface PolynomialKernel extends Standard<Polynomial> {
     void setCoefficient(int degree, int value);
 
     /**
-     * get the efficient of the known polynomial
+     * get the efficient of the known polynomial.
      *
      * @param degree
      *            the specific degree
@@ -44,7 +63,7 @@ public interface PolynomialKernel extends Standard<Polynomial> {
     int getCoefficient(int degree);
 
     /**
-     * return the highest degree of polynomial
+     * return the highest degree of polynomial.
      *
      * @return the maximum degree of the polynomial
      * @ensure result = maxDegree(this)

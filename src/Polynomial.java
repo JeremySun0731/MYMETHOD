@@ -5,7 +5,7 @@ import components.map.Map1L;
 /**
  *
  */
-public class PolynomialTest {
+public class Polynomial {
     /**
      * set a polynomial formula.
      */
