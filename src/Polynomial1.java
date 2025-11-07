@@ -9,7 +9,7 @@
  * {@code @ensures} clauses where applicable.
  * </p>
  *
- * @author YourName
+ * @author Jeremy Sun 
  * @date 2025-11-06
  */
 public interface Polynomial1 extends PolynomialKernel {
