@@ -96,4 +96,7 @@ public abstract class PolynomialSecondary implements Polynomial {
         }
         return result;
     }
+
+    @Override
+    public abstract Polynomial newInstance();
 }
