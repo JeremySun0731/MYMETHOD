@@ -99,4 +99,16 @@ public abstract class PolynomialSecondary implements Polynomial {
 
     @Override
     public abstract Polynomial newInstance();
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = this.getDegree(); i >= 0; i--) {
+            int coeffi = this.getCoefficient(i);
+            if (coeffi != 0) {
+                sb.append(coeffi).append("x^").append(i);
+            }
+        }
+        return sb;
+    }
 }
