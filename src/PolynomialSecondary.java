@@ -58,4 +58,42 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
+    /**
+     * Returns the derivative of this polynomial as a new polynomial.
+     *
+     * @return a new polynomial that is the derivative of this one
+     */
+    @Override
+    public Polynomial derivative() {
+        assert this != null : "Violation of: p is not null";
+        Polynomial result = this.newInstance();
+        result.clear();
+        for (int i = 1; i < this.getDegree(); i++) {
+            int coeffi = this.getCoefficient(i);
+            if (coeffi != 0) {
+                result.setCoefficient(i - 1, i * coeffi);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the indefinite integral of this polynomial as a new polynomial.
+     * The constant of integration is assumed to be 0.
+     *
+     * @return a new polynomial that is the integral of this one
+     */
+    @Override
+    public Polynomial integrate() {
+        assert this != null : "Violation of: p is not null";
+        Polynomial result = this.newInstance();
+        result.clear();
+        for (int i = 0; i < this.getDegree(); i++) {
+            int coeffi = this.getCoefficient(i);
+            if (coeffi != 0) {
+                result.setCoefficient(i + 1, 1 / (i * coeffi));
+            }
+        }
+        return result;
+    }
 }
