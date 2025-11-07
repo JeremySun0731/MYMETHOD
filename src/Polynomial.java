@@ -9,10 +9,10 @@
  * {@code @ensures} clauses where applicable.
  * </p>
  *
- * @author Jeremy Sun 
+ * @author Jeremy Sun
  * @date 2025-11-06
  */
-public interface Polynomial1 extends PolynomialKernel {
+public interface Polynomial extends PolynomialKernel {
     /**
      * add two polynomial together.
      *
