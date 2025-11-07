@@ -7,6 +7,11 @@ and this project adheres to [Calendar Versioning](https://calver.org/) of
 the following form: YYYY.0M.0D.
 
 ## [Unreleased]
+#### [2025.11.07]
+- Added `Polynomial1` interface and `PolynomialSecondary` abstract class.
+- Added method stubs: `add`, `multiply`, `derivative`, `integrate`.
+- Updated structure to follow abstract class requirement.
+
 #### [2025.11.06]
 ### Added
 - Created `PolynomialKernel.java` interface file.
