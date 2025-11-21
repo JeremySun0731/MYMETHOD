@@ -109,6 +109,6 @@ public abstract class PolynomialSecondary implements Polynomial {
                 sb.append(coeffi).append("x^").append(i);
             }
         }
-        return sb;
+        return sb.toString();
     }
 }
