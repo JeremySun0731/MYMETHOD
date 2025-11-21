@@ -7,6 +7,11 @@ and this project adheres to [Calendar Versioning](https://calver.org/) of
 the following form: YYYY.0M.0D.
 
 ## [Unreleased]
+#### [2025.11.21]
+- Created `Polynomial1L.java` interface file.
+- Added method stubs: `Polynomial1L`, `clear`, `newPolynomial`, `setCoefficient`,`getCoefficient`, `getDegree`, `newInstance`.
+- added @convention, @correspond, and represent to the class
+
 #### [2025.11.07]
 - Added `Polynomial1` interface and `PolynomialSecondary` abstract class.
 - Added method stubs: `add`, `multiply`, `derivative`, `integrate`.
