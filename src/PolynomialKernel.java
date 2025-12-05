@@ -27,19 +27,6 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      */
     void newPolynomial();
 
-    /**
-     * Inserts a term in this polynomial.
-     *
-     * <p>
-     * a new term is added.
-     * </p>
-     *
-     * @param degree
-     *            the degree (exponent) of the term to insert or update
-     * @param value
-     *            the coefficient of the term
-     */
-    void put(int degree, int value);
 
     /**
      * change the known coefficient of the specific degree.
@@ -50,7 +37,7 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      *            the new number of the target polynomial
      * @ensures coefficient(degree) = value
      */
-    void setCoefficient(int degree, int value);
+    void setCoefficient(int degree, double value);
 
     /**
      * get the efficient of the known polynomial.
@@ -60,7 +47,7 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      * @return the value of specific degree's coefficient
      * @ensures result = coefficient(degree)
      */
-    int getCoefficient(int degree);
+    double getCoefficient(int degree);
 
     /**
      * return the highest degree of polynomial.

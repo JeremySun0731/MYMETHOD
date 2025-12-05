@@ -13,16 +13,16 @@ public abstract class PolynomialSecondary implements Polynomial {
         result.clear();
         //add this to the result
         for (int i = 0; i <= this.getDegree(); i++) {
-            int coefic = this.getCoefficient(i);
+            double coefic = this.getCoefficient(i);
             if (coefic != 0) {
                 result.setCoefficient(i, coefic);
             }
         }
 
         for (int i = 0; i <= p.getDegree(); i++) {
-            int coefic = p.getCoefficient(i);
+            double coefic = p.getCoefficient(i);
             if (coefic != 0) {
-                int sum = result.getCoefficient(i) + coefic;
+                double sum = result.getCoefficient(i) + coefic;
                 result.setCoefficient(i, sum);
             }
         }
@@ -42,13 +42,13 @@ public abstract class PolynomialSecondary implements Polynomial {
         Polynomial result = this.newInstance();
         result.clear();
         for (int i = 0; i <= this.getDegree(); i++) {
-            int coefic = this.getCoefficient(i);
+            double coefic = this.getCoefficient(i);
             if (coefic != 0) {
-                for (int j = 0; j < p.getCoefficient(j); j++) {
-                    int coef1 = p.getCoefficient(j);
+                for (int j = 0; j <= p.getDegree(); j++) {
+                    double coef1 = p.getCoefficient(j);
                     if (coef1 != 0) {
                         int degree = i + j;
-                        int newCoefficient = result.getCoefficient(degree)
+                        double newCoefficient = result.getCoefficient(degree)
                                 + coefic * coef1;
                         result.setCoefficient(degree, newCoefficient);
                     }
@@ -65,11 +65,10 @@ public abstract class PolynomialSecondary implements Polynomial {
      */
     @Override
     public Polynomial derivative() {
-        assert this != null : "Violation of: p is not null";
         Polynomial result = this.newInstance();
         result.clear();
-        for (int i = 1; i < this.getDegree(); i++) {
-            int coeffi = this.getCoefficient(i);
+        for (int i = 1; i <= this.getDegree(); i++) {
+            double coeffi = this.getCoefficient(i);
             if (coeffi != 0) {
                 result.setCoefficient(i - 1, i * coeffi);
             }
@@ -88,10 +87,10 @@ public abstract class PolynomialSecondary implements Polynomial {
         assert this != null : "Violation of: p is not null";
         Polynomial result = this.newInstance();
         result.clear();
-        for (int i = 0; i < this.getDegree(); i++) {
-            int coeffi = this.getCoefficient(i);
+        for (int i = 0; i <= this.getDegree(); i++) {
+            double coeffi = this.getCoefficient(i);
             if (coeffi != 0) {
-                result.setCoefficient(i + 1, 1 / (i * coeffi));
+                result.setCoefficient(i + 1, coeffi / (i + 1));
             }
         }
         return result;
@@ -100,15 +99,83 @@ public abstract class PolynomialSecondary implements Polynomial {
     @Override
     public abstract Polynomial newInstance();
 
+    /**
+     * Returns a string representation of the polynomial.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        boolean firstTerm = true;
         for (int i = this.getDegree(); i >= 0; i--) {
-            int coeffi = this.getCoefficient(i);
-            if (coeffi != 0) {
-                sb.append(coeffi).append("x^").append(i);
+            double coeff = this.getCoefficient(i);
+            if (coeff != 0) {
+                if (!firstTerm) {
+                    sb.append(coeff > 0 ? " + " : " - ");
+                } else if (coeff < 0) {
+                    sb.append("-");
+                }
+                double absCoeff = Math.abs(coeff);
+                if (i == 0 || absCoeff != 1) {
+                    sb.append(absCoeff);
+                }
+                if (i > 0) {
+                    sb.append("x");
+                    if (i > 1) {
+                        sb.append("^").append(i);
+                    }
+                }
+                firstTerm = false;
             }
         }
-        return sb.toString();
+        return sb.length() == 0 ? "0" : sb.toString();
+    }
+
+    /**
+     * Compares this polynomial to the specified object for equality.
+     *
+     * @param obj
+     *            the object to compare with
+     * @return true if the specified object is a polynomial equal to this one,
+     *         false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = true;
+
+        if (this == obj) {
+            result = true;
+        } else if (!(obj instanceof Polynomial other)) {
+            result = false;
+        } else {
+            // compare degrees
+            if (this.getDegree() != other.getDegree()) {
+                result = false;
+            } else {
+                // compare coefficients
+                for (int i = 0; i <= this.getDegree() && result; i++) {
+                    if (Double.compare(this.getCoefficient(i),
+                            other.getCoefficient(i)) != 0) {
+                        result = false;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns the hash code for this polynomial.
+     */
+    @Override
+    public int hashCode() {
+        int hash = 1;
+
+        for (int i = 0; i <= this.getDegree(); i++) {
+            double coeff = this.getCoefficient(i);
+            hash = 31 * hash + Double.hashCode(coeff);
+        }
+
+        return hash;
     }
 }
