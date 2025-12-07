@@ -24,6 +24,15 @@ public interface Polynomial extends PolynomialKernel {
     Polynomial add(Polynomial p);
 
     /**
+     * subtract p from this polynomial.
+     * 
+     * @param p
+     * @return the difference of this and p
+     * @ensure this = this - p
+     */
+    Polynomial subtract(Polynomial p);
+
+    /**
      * multiply this with p.
      *
      * @param p
