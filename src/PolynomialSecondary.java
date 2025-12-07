@@ -1,3 +1,7 @@
+/**
+ * An abstract implementation of Polynomial that provides secondary operations
+ * such as addition, multiplication, differentiation, and integration.
+ */
 public abstract class PolynomialSecondary implements Polynomial {
     /**
      * Returns a new polynomial that is the sum of this polynomial and p.
@@ -24,6 +28,36 @@ public abstract class PolynomialSecondary implements Polynomial {
             if (coefic != 0) {
                 double sum = result.getCoefficient(i) + coefic;
                 result.setCoefficient(i, sum);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a new polynomial that is the difference of this polynomial and p.
+     *
+     * @param p
+     *            the polynomial to subtract; must not be null
+     * @return a new Polynomial that is the result of this - p
+     */
+    @Override
+    public Polynomial subtract(Polynomial p) {
+        assert p != null : "Violation of: p is not null";
+        Polynomial result = this.newInstance();
+        result.clear();
+        //subtract p from this
+        for (int i = 0; i <= p.getDegree(); i++) {
+            double coefic = this.getCoefficient(i);
+            if (coefic != 0) {
+                result.setCoefficient(i, coefic);
+            }
+        }
+
+        for (int i = 0; i <= p.getDegree(); i++) {
+            double coefic = p.getCoefficient(i);
+            if (coefic != 0) {
+                double difference = result.getCoefficient(i) - coefic;
+                result.setCoefficient(i, difference);
             }
         }
         return result;
@@ -96,6 +130,11 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
+    /**
+     * Creates and returns a new instance of the polynomial type.
+     *
+     * @return a new instance of the polynomial type
+     */
     @Override
     public abstract Polynomial newInstance();
 
