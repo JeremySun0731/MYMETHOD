@@ -131,6 +131,64 @@ public abstract class PolynomialSecondary implements Polynomial {
     }
 
     /**
+     * Evaluates this polynomial at the given value of x.
+     *
+     * @param x
+     *            the value at which to evaluate this polynomial
+     * @return the result of f(x)
+     */
+    public double evaluate(double x) {
+        double result = 0.0;
+
+        for (int degree = 0; degree <= this.getDegree(); degree++) {
+            double coef = this.getCoefficient(degree);
+            if (coef != 0.0) {
+                result += coef * Math.pow(x, degree);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * check whether the polynomial is zero polynomial.
+     *
+     * @return true if the polynomial is zero polynomial, false otherwise
+     */
+    public boolean isZero() {
+        boolean zero = true;
+        for (int i = 0; i <= this.getDegree(); i++) {
+            if (this.getCoefficient(i) != 0.0) {
+                zero = false;
+            }
+
+        }
+        return zero;
+    }
+
+    /**
+     * Returns a new polynomial that is this polynomial scaled by the constant
+     * c.
+     *
+     * @param c
+     *            the constant to scale by
+     * @return a new Polynomial that is c * this
+     */
+    public Polynomial scale(double c) {
+        Polynomial result = this.newInstance();
+        result.clear();
+
+        for (int degree = 0; degree <= this.getDegree(); degree++) {
+            double coef = this.getCoefficient(degree);
+            if (coef != 0.0) {
+                result.setCoefficient(degree, coef * c);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Creates and returns a new instance of the polynomial type.
      *
      * @return a new instance of the polynomial type

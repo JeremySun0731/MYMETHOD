@@ -27,7 +27,6 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      */
     void newPolynomial();
 
-
     /**
      * change the known coefficient of the specific degree.
      *
@@ -48,6 +47,14 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      * @ensures result = coefficient(degree)
      */
     double getCoefficient(int degree);
+
+    /**
+     * return the highest degree of polynomial.
+     *
+     * @return the maximum degree of the polynomial
+     * @ensure result = maxDegree(this)
+     */
+    void removeCoefficient(int degree);
 
     /**
      * return the highest degree of polynomial.
