@@ -1,3 +1,4 @@
+package components.polynomial;
 /**
  * An abstract implementation of Polynomial that provides secondary operations
  * such as addition, multiplication, differentiation, and integration.

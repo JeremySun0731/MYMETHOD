@@ -1,3 +1,4 @@
+package components.polynomial;
 import components.standard.Standard;
 
 /**
@@ -49,10 +50,11 @@ public interface PolynomialKernel extends Standard<Polynomial> {
     double getCoefficient(int degree);
 
     /**
-     * return the highest degree of polynomial.
+     * remove the known coefficient of specific degree.
      *
-     * @return the maximum degree of the polynomial
-     * @ensure result = maxDegree(this)
+     * @param degree
+     *            the target degree of polynomial
+     * @ensures coefficient(degree) = 0
      */
     void removeCoefficient(int degree);
 

@@ -9,8 +9,26 @@ import components.map.Map1L;
  * values represent coefficients (real numbers). Duplicate degrees are not
  * allowed, and only non-zero terms are stored.
  *
- * @convention All keys must be non-negative integers; no duplicate keys. All
- *             coefficients must be valid (non-null) real numbers.
+ * @mathdefinitions <pre>
+ * maxDegree(p: polynomial of real numbers) =
+ *  if p = 0 then 0
+ * else max({ d in Z | coefficient(p, d) ≠ 0 })
+ * </pre>
+ * @fields rep map from degrees to coefficients
+ * @structure Map<Integer, Double>
+ * @domain rep.keys = {d in Z | coefficient(this, d) ≠ 0} rep.values =
+ *         {coefficient(this, d) | d in rep.keys}
+ * @bounds |rep| <= number of non-zero terms in the polynomial
+ * @initially this = 0
+ * @constraints mutable, finite
+ * @strengths Representation is efficient for sparse polynomials with
+ *            non-contiguous degrees.
+ * @weaknesses Operations that require iterating through all degrees may be less
+ *             efficient due to the map structure.
+ * @convention Keys (degrees) may be any integer, including negative;
+ *             coefficients are non-zero real numbers.
+ *
+ * @author Jeremy Sun
  *
  * @correspondence this = Σ (rep.get(d) * x^d) for all degrees d in rep.
  */
@@ -61,7 +79,6 @@ public class Polynomial1L extends PolynomialSecondary {
      */
     @Override
     public final void setCoefficient(int degree, double value) {
-        assert degree >= 0 : "Violation of: degree must be non-negative";
         if (value == 0.0) {
             this.rep.remove(degree);
         } else if (this.rep.hasKey(degree)) {
@@ -97,10 +114,8 @@ public class Polynomial1L extends PolynomialSecondary {
      */
     @Override
     public final void removeCoefficient(int degree) {
-        // only remove if the degree exists
-        if (this.rep.hasKey(degree)) {
-            this.rep.remove(degree);
-        }
+        // set the coefficient of the specific degree to 0.0
+        this.setCoefficient(degree, 0.0);
     }
 
     /**
@@ -111,17 +126,24 @@ public class Polynomial1L extends PolynomialSecondary {
      */
     @Override
     public final int getDegree() {
-        // initialize maxDegree to -1 (indicating no terms)
-        int maxDegree = -1;
-        // iterate through all pairs in the map to find the maximum degree
+
+        int result = 0; // default for empty polynomial
+
+        boolean first = true;
         for (Map.Pair<Integer, Double> pair : this.rep) {
-            int degree = pair.key();
-            // update maxDegree if current degree is greater
-            if (degree > maxDegree) {
-                maxDegree = degree;
+
+            if (first) {
+                result = pair.key();
+                first = false;
+            } else {
+                int degree = pair.key();
+                if (degree > result) {
+                    result = degree;
+                }
             }
         }
-        return maxDegree;
+
+        return result;
     }
 
     /**

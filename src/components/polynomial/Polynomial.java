@@ -1,3 +1,4 @@
+package components.polynomial;
 /**
  * The {@code Polynomial} interface represents an immutable mathematical
  * polynomial with standard algebraic operations such as addition,
