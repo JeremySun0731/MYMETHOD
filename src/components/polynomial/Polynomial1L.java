@@ -80,11 +80,15 @@ public class Polynomial1L extends PolynomialSecondary {
     @Override
     public final void setCoefficient(int degree, double value) {
         if (value == 0.0) {
-            this.rep.remove(degree);
-        } else if (this.rep.hasKey(degree)) {
-            this.rep.replaceValue(degree, value);
+            if (this.rep.hasKey(degree)) {
+                this.rep.remove(degree);
+            }
         } else {
-            this.rep.add(degree, value);
+            if (this.rep.hasKey(degree)) {
+                this.rep.replaceValue(degree, value);
+            } else {
+                this.rep.add(degree, value);
+            }
         }
     }
 
@@ -176,4 +180,5 @@ public class Polynomial1L extends PolynomialSecondary {
         // Correct OSU-component transfer of the representation
         this.rep.transferFrom(local.rep);
     }
+
 }
