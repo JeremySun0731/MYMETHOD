@@ -106,23 +106,6 @@ public abstract class PolynomialTest {
     }
 
     /**
-     * Test newPolynomial without using setCoefficient.
-     */
-    @Test
-    public final void testNewPolynomialDefault() {
-        // Create empty polynomial
-        Polynomial pTest = this.constructorTest();
-        Polynomial pRef = this.constructorRef();
-
-        // Both are already empty, but call newPolynomial to reset again
-        pTest.newPolynomial();
-        pRef.newPolynomial();
-        // clear pTest to ensure they are zero polynomials
-        pTest.clear();
-        assertEquals(pRef, pTest);
-    }
-
-    /**
      * Test clear on polynomial with multiple terms.
      */
     @Test
@@ -154,54 +137,6 @@ public abstract class PolynomialTest {
         assertTrue(pRef.getDegree() == 0);
         // Degree should be 0
         assertEquals(pRef.getCoefficient(0), pTest.getCoefficient(0), 0.0001);
-    }
-
-    // --------------------------------------
-    // Test 3: newPolynomial()
-    // --------------------------------------
-    /**
-     * Test newPolynomial on a non-empty polynomial.
-     */
-    @Test
-    public final void testNewPolynomialNonEmpty() {
-        // Create polynomial 5 + 3x^2
-        Polynomial pTest = this.createPoly(0, 5, 2, 3); // 5 + 3x^2
-        Polynomial pRef = this.constructorRef();
-
-        // Create empty polynomial for reference
-        pTest.newPolynomial();
-        // Both should be zero polynomial
-        assertEquals(pRef, pTest);
-        // Degree should be equal
-        assertEquals(pRef.getDegree(), pTest.getDegree());
-        // Degree should be 0
-        assertEquals(pRef.getCoefficient(0), pTest.getCoefficient(0), 0.0001);
-        assertEquals(pRef.getCoefficient(0) == 0.0,
-                pTest.getCoefficient(0) == 0.0);
-        // Verify equality of degrees
-        assertTrue(pTest.getDegree() == 0);
-    }
-
-    /**
-     * Test newPolynomial on an already empty polynomial.
-     */
-    @Test
-    public final void testNewPolynomialEmpty() {
-        // Create empty polynomial
-        Polynomial pTest = this.constructorTest();
-        Polynomial pRef = this.constructorRef();
-        // Both are already empty, but call newPolynomial to reset again
-        pTest.newPolynomial();
-        // Both should be zero polynomial
-        assertEquals(pRef, pTest);
-        // Degree should be 0
-        assertEquals(pRef.getDegree(), pTest.getDegree());
-        // Coefficient of degree 0 should be equal
-        assertEquals(pRef.getCoefficient(0), pTest.getCoefficient(0), 0.0001);
-        assertEquals(pRef.getCoefficient(0) == 0.0,
-                pTest.getCoefficient(0) == 0.0);
-        // verify equality of degrees
-        assertTrue(pTest.getDegree() == 0);
     }
 
     // --------------------------------------

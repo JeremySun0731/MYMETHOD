@@ -1,4 +1,5 @@
 package components.polynomial;
+
 import components.standard.Standard;
 
 /**
@@ -21,12 +22,6 @@ import components.standard.Standard;
  * </p>
  */
 public interface PolynomialKernel extends Standard<Polynomial> {
-    /**
-     * Creates a new (empty) polynomial.
-     *
-     * @ensures this = 0
-     */
-    void newPolynomial();
 
     /**
      * change the known coefficient of the specific degree.
@@ -66,11 +61,4 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      */
     int getDegree();
 
-    /**
-     * Clears the entire polynomial, setting all coefficients to zero.
-     *
-     * @ensures this = 0
-     */
-    @Override
-    void clear();
 }

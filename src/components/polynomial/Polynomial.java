@@ -1,4 +1,5 @@
 package components.polynomial;
+
 /**
  * The {@code Polynomial} interface represents an immutable mathematical
  * polynomial with standard algebraic operations such as addition,
@@ -26,7 +27,7 @@ public interface Polynomial extends PolynomialKernel {
 
     /**
      * subtract p from this polynomial.
-     * 
+     *
      * @param p
      * @return the difference of this and p
      * @ensure this = this - p

@@ -48,35 +48,6 @@ public class Polynomial1L extends PolynomialSecondary {
         this.rep = new Map1L<>();
     }
 
-    /**
-     * Clears this polynomial to zero.
-     *
-     * @ensures this = 0
-     *
-     */
-    @Override
-    public final void clear() {
-        this.rep.clear();
-    }
-
-    /**
-     * Creates a new (empty) polynomial.
-     *
-     * @ensures this = 0
-     */
-    @Override
-    public final void newPolynomial() {
-        this.rep = new Map1L<>();
-    }
-
-    /**
-     * change the known coefficient of the specific degree.
-     *
-     * @param degree
-     *            the target degree of polynomial
-     * @param value
-     *            the new number of the target polynomial
-     */
     @Override
     public final void setCoefficient(int degree, double value) {
         if (value == 0.0) {
@@ -92,13 +63,6 @@ public class Polynomial1L extends PolynomialSecondary {
         }
     }
 
-    /**
-     * get the efficient of the known polynomial.
-     *
-     * @param degree
-     *            the specific degree
-     * @return the value of specific degree's coefficient
-     */
     @Override
     public final double getCoefficient(int degree) {
         // default coefficient is 0.0
@@ -110,24 +74,12 @@ public class Polynomial1L extends PolynomialSecondary {
         return result;
     }
 
-    /**
-     * remove the coefficient of specific degree.
-     *
-     * @param degree
-     *            the specific degree
-     */
     @Override
     public final void removeCoefficient(int degree) {
         // set the coefficient of the specific degree to 0.0
         this.setCoefficient(degree, 0.0);
     }
 
-    /**
-     * return the highest degree of polynomial.
-     *
-     * @return the maximum degree of the polynomial
-     * @ensures result = maxDegree(this)
-     */
     @Override
     public final int getDegree() {
 
@@ -150,27 +102,17 @@ public class Polynomial1L extends PolynomialSecondary {
         return result;
     }
 
-    /**
-     * Creates and returns a new instance of Polynomial1L.
-     *
-     * @return new instance of Polynomial1L
-     * @ensures newInstance = 0
-     *
-     */
+    @Override
+    public final void clear() {
+        this.rep.clear();
+    }
+
     @Override
     public final Polynomial newInstance() {
         // create and return a new Polynomial1L instance
         return new Polynomial1L();
     }
 
-    /**
-     * Transfers the contents of the source polynomial to this polynomial.
-     *
-     * @param source
-     *            the source polynomial
-     * @ensures this = #source and source = 0
-     *
-     */
     @Override
     public final void transferFrom(Polynomial source) {
         assert source instanceof Polynomial1L : "Violation of: source is of dynamic type Polynomial1L";

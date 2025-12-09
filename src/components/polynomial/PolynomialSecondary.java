@@ -1,4 +1,5 @@
 package components.polynomial;
+
 /**
  * An abstract implementation of Polynomial that provides secondary operations
  * such as addition, multiplication, differentiation, and integration.
@@ -188,14 +189,6 @@ public abstract class PolynomialSecondary implements Polynomial {
 
         return result;
     }
-
-    /**
-     * Creates and returns a new instance of the polynomial type.
-     *
-     * @return a new instance of the polynomial type
-     */
-    @Override
-    public abstract Polynomial newInstance();
 
     /**
      * Returns a string representation of the polynomial.
