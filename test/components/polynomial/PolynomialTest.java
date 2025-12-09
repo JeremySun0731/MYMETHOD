@@ -384,8 +384,8 @@ public abstract class PolynomialTest {
         assertTrue(pTest.getCoefficient(3) == -2.5);
         assertTrue(pTest.getCoefficient(4) == -3.1);
         // Remove terms
-        pTest.setCoefficient(3, 0.0); // Remove 2.5x^3
-        pTest.setCoefficient(4, 0.0); // Remove 3x^4
+        pTest.removeCoefficient(3); // Remove 2.5x^3
+        pTest.removeCoefficient(4); // Remove 3x^4
         // Compare full polynomial
         assertEquals(pRef, pTest);
 
@@ -418,7 +418,7 @@ public abstract class PolynomialTest {
         assertEquals(-9.1, pTest.getCoefficient(2), 0.0001);
 
         // Delete the term
-        pTest.setCoefficient(2, 0.0);
+        pTest.removeCoefficient(2);
 
         // Full polynomial equality check
         assertEquals(pRef, pTest);
@@ -831,7 +831,7 @@ public abstract class PolynomialTest {
         Polynomial pTest = this.createPoly(3, 4.0, 2, 7.0, 0, 1.0);
 
         // Set coefficient of x^3 to 0 → remove highest term
-        pTest.setCoefficient(3, 0.0);
+        pTest.removeCoefficient(3);
 
         // Reference polynomial: 7x^2 + 1 (degree = 2)
         Polynomial pRef = this.createPoly(2, 7.0, 0, 1.0);

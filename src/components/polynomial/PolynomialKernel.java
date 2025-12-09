@@ -30,6 +30,7 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      *            the target degree of polynomial
      * @param value
      *            the new number of the target polynomial
+     * @requires degree != 0
      * @ensures coefficient(degree) = value
      */
     void setCoefficient(int degree, double value);
