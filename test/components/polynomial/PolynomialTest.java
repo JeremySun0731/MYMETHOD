@@ -57,20 +57,32 @@ public abstract class PolynomialTest {
     // Test 2: clear()
     // --------------------------------------
     /**
-     * Helper to create a polynomial given degree-coefficient pairs. Example:
-     * createPoly(0, 5, 2, 3) creates 5 + 3x^2
+     * Creates a polynomial from degree–coefficient pairs. Arguments: degree1,
+     * coef1, degree2, coef2, ...
+     *
+     * Example: createPoly(3, 2.5, 1, -4, 0, 3) = 2.5x^3 - 4x + 3
+     *
+     * Coefficients may be integer or double. Zero coefficients are ignored.
      */
     private Polynomial createPoly(Object... args) {
         assert args.length
                 % 2 == 0 : "Arguments must be degree-coefficient pairs";
 
         Polynomial p = this.constructorTest();
+        p.clear();
 
         for (int i = 0; i < args.length; i += 2) {
-            int degree = (int) args[i];
+            int degree = ((Number) args[i]).intValue();
+
+            // Allow int, float, double coefficients
             double coef = ((Number) args[i + 1]).doubleValue();
-            p.setCoefficient(degree, coef);
+
+            // Skip zero — OSU Component requires no zero-terms
+            if (coef != 0.0) {
+                p.setCoefficient(degree, coef);
+            }
         }
+
         return p;
     }
 
@@ -140,7 +152,7 @@ public abstract class PolynomialTest {
     }
 
     // --------------------------------------
-    // Test 4: setCoefficient()
+    // Test 3: setCoefficient()
     // --------------------------------------
     /**
      * Test setCoefficient: add positive single new term.
@@ -350,7 +362,7 @@ public abstract class PolynomialTest {
         Polynomial pRef = this.createPoly(4, 3.1, 2, 9.1); // Removed degree=3
         assertFalse(pTest == pRef);
         // Remove term: 2.5x^3 -> 0
-        pTest.setCoefficient(3, 0.0);
+        pTest.removeCoefficient(3);
 
         // Compare entire polynomial
         assertEquals(pRef, pTest);
@@ -430,7 +442,7 @@ public abstract class PolynomialTest {
         assertEquals(0, pTest.getDegree());
     }
     // --------------------------------------
-    // Test 5: getCoefficient()
+    // Test 4: getCoefficient()
     // --------------------------------------
 
     /**
@@ -523,7 +535,7 @@ public abstract class PolynomialTest {
     }
 
     // --------------------------------------
-    // Test 6: removeCoefficient()
+    // Test 5: removeCoefficient()
     // --------------------------------------
     /**
      * Test removeCoefficient: remove an existing term.
@@ -584,7 +596,7 @@ public abstract class PolynomialTest {
     }
 
     // --------------------------------------
-    // Test 7: getDegree()
+    // Test 6: getDegree()
     // --------------------------------------
     /**
      * Test getDegree: empty polynomial.
@@ -852,6 +864,9 @@ public abstract class PolynomialTest {
         assertEquals(pRef, pTest);
     }
 
+    // --------------------------------------
+    // Test 7: TransferFrom()
+    // --------------------------------------
     /**
      * Test transferFrom: normal transfer from non-empty source.
      */
@@ -911,6 +926,391 @@ public abstract class PolynomialTest {
         // source must be empty
         assertEquals(0, pSource.getDegree());
         assertTrue(pSource.getCoefficient(0) == 0.0);
+    }
+
+    // --------------------------------------
+    // Secondary Test Cases
+    // --------------------------------------
+    // --------------------------------------
+    // Test 1: add()
+    // --------------------------------------
+    /**
+     * Test add: normal case with overlapping degrees.
+     */
+    @Test
+    public void testAddNormal1() {
+
+        // p1 = 3x^3 + 2x^2 + x
+        Polynomial pTest1 = this.createPoly(3, 3, 2, 2, 1, 1);
+
+        // p2 = x^2 + 4
+        Polynomial pTest2 = this.createPoly(2, 1, 0, 4);
+
+        // Expected = 3x^3 + 3x^2 + x + 4
+        Polynomial pRef = this.createPoly(3, 3, 2, 3, 1, 1, 0, 4);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: non-overlapping degrees.
+     */
+    @Test
+    public void testAddDisjoint() {
+
+        // p1 = 5x^4
+        Polynomial pTest1 = this.createPoly(4, 5);
+
+        // p2 = 3x + 2
+        Polynomial pTest2 = this.createPoly(1, 3, 0, 2);
+
+        // Expected = 5x^4 + 3x + 2
+        Polynomial pRef = this.createPoly(4, 5, 1, 3, 0, 2);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: includes negative degrees.
+     */
+    @Test
+    public void testAddNegativeDegrees() {
+
+        // p1 = x^-2 + 4x^2
+        Polynomial pTest1 = this.createPoly(-2, 1, 2, 4);
+
+        // p2 = 3x^-2 + x^-1
+        Polynomial pTest2 = this.createPoly(-2, 3, -1, 1);
+
+        // Expected = 4x^-2 + x^-1 + 4x^2
+        Polynomial pRef = this.createPoly(-2, 4, -1, 1, 2, 4);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: adding zero polynomial.
+     */
+    @Test
+    public void testAddZeroPolynomial() {
+
+        // p1 = 2x^2 + 1
+        Polynomial pTest1 = this.createPoly(2, 2, 0, 1);
+
+        // p2 = 0
+        Polynomial pTest2 = this.createPoly();
+
+        // Expected = p1
+        Polynomial pRef = this.createPoly(2, 2, 0, 1);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: both are zero polynomials.
+     */
+    @Test
+    public void testAddBothZero() {
+
+        Polynomial pTest1 = this.createPoly();
+        Polynomial pTest2 = this.createPoly();
+
+        Polynomial pRef = this.createPoly();
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: term cancellation to zero.
+     */
+    @Test
+    public void testAddCancelToZero() {
+
+        // p1 = 3x^2
+        Polynomial pTest1 = this.createPoly(2, 3);
+
+        // p2 = -3x^2
+        Polynomial pTest2 = this.createPoly(2, -3);
+
+        // Expected = 0
+        Polynomial pRef = this.createPoly();
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: degree increases after addition.
+     */
+    @Test
+    public void testAddIncreaseDegree() {
+
+        // p1 = 5x^2 + 1
+        Polynomial pTest1 = this.createPoly(2, 5, 0, 1);
+
+        // p2 = 3x^5
+        Polynomial pTest2 = this.createPoly(5, 3);
+
+        // Expected = 3x^5 + 5x^2 + 1
+        Polynomial pRef = this.createPoly(5, 3, 2, 5, 0, 1);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    /**
+     * Test add: minDegree decreases after addition.
+     */
+    @Test
+    public void testAddDecreaseMinDegree() {
+
+        // p1 = x + 1
+        Polynomial pTest1 = this.createPoly(1, 1, 0, 1);
+
+        // p2 = 4x^-3
+        Polynomial pTest2 = this.createPoly(-3, 4);
+
+        // Expected = 4x^-3 + x + 1
+        Polynomial pRef = this.createPoly(-3, 4, 1, 1, 0, 1);
+
+        assertEquals(pRef, pTest1.add(pTest2));
+    }
+
+    // --------------------------------------
+    // Test 1: subtract()
+    // --------------------------------------
+    @Test
+    public void testSubtractNormalOverlap() {
+        Polynomial p1 = this.createPoly(3, 3, 2, 2, 1, 1);
+        Polynomial p2 = this.createPoly(2, 1, 1, 4);
+        Polynomial pRef = this.createPoly(3, 3, 2, 1, 1, -3);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: no overlapping terms between p1 and p2.
+     */
+    @Test
+    public void testSubtractNoOverlap() {
+        Polynomial p1 = this.createPoly(4, 2, 1, 3);
+        Polynomial p2 = this.createPoly(3, 7, 0, 5);
+        Polynomial pRef = this.createPoly(4, 2, 3, -7, 1, 3, 0, -5);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: subtraction results in negative coefficients.
+     */
+    @Test
+    public void testSubtractProducesNegatives() {
+        Polynomial p1 = this.createPoly(2, 1);
+        Polynomial p2 = this.createPoly(2, 5, 1, 3);
+        Polynomial pRef = this.createPoly(2, -4, 1, -3);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: one term becomes zero and must be removed.
+     */
+    @Test
+    public void testSubtractTermBecomesZero() {
+        Polynomial p1 = this.createPoly(3, 2, 1, 4);
+        Polynomial p2 = this.createPoly(3, 2);
+        Polynomial pRef = this.createPoly(1, 4);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: subtracting zero polynomial returns the same polynomial.
+     */
+    @Test
+    public void testSubtractZeroPolynomial() {
+        Polynomial p1 = this.createPoly(3, 5, 0, 2);
+        Polynomial p2 = this.createPoly();
+        Polynomial pRef = this.createPoly(3, 5, 0, 2);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: zero polynomial minus p equals the negation of p.
+     */
+    @Test
+    public void testZeroMinusP() {
+        Polynomial p1 = this.createPoly();
+        Polynomial p2 = this.createPoly(2, 3, 0, 1);
+        Polynomial pRef = this.createPoly(2, -3, 0, -1);
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test subtract: highest-degree term removed causing degree to decrease.
+     */
+
+    @Test
+    public void testSubtractDegreeDrops() {
+
+        // p1 = x^4 + 3x^2
+        Polynomial p1 = this.createPoly(4, 1, 2, 3);
+
+        // p2 = x^4
+        Polynomial p2 = this.createPoly(4, 1);
+
+        // Expected = 3x^2
+        Polynomial pRef = this.createPoly(2, 3);
+
+        assertEquals(pRef, p1.subtract(p2));
+    }
+
+    /**
+     * Test multiply: normal case with overlapping exponents.
+     */
+    /**
+     * Test multiply: normal case with overlapping exponents.
+     */
+    @Test
+    public void testMultiplyNormal() {
+        Polynomial p1 = this.createPoly(1, 2, 2, 3); // 2x + 3x^2
+        Polynomial p2 = this.createPoly(0, 4, 1, 1); // 4 + x
+
+        Polynomial pRef = this.createPoly(3, 3, // 3x^3
+                2, 14, // 14x^2
+                1, 8 // 8x
+        );
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: multiplying by zero polynomial gives zero.
+     */
+    @Test
+    public void testMultiplyByZeroPolynomial() {
+        Polynomial p1 = this.createPoly(2, 5, 0, 1); // 5x^2 + 1
+        Polynomial p2 = this.createPoly(); // 0
+
+        Polynomial pRef = this.createPoly(); // 0
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: zero polynomial times non-zero gives zero.
+     */
+    @Test
+    public void testMultiplyZeroByNonZero() {
+        Polynomial p1 = this.createPoly(); // 0
+        Polynomial p2 = this.createPoly(3, 2, 1, 7); // 2x^3 + 7x
+
+        Polynomial pRef = this.createPoly(); // 0
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: each polynomial has one term.
+     */
+    @Test
+    public void testMultiplySingleTerm() {
+        Polynomial p1 = this.createPoly(3, 2); // 2x^3
+        Polynomial p2 = this.createPoly(4, 5); // 5x^4
+        // Expected: 10x^7
+        Polynomial pRef = this.createPoly(7, 10); // 10x^7
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: some resulting terms cancel out.
+     */
+    @Test
+    public void testMultiplyCreatesCancellation() {
+        Polynomial p1 = this.createPoly(1, 2, 0, 3); // 2x + 3
+        Polynomial p2 = this.createPoly(1, -2, 0, 2); // -2x + 2
+
+        // Expansion:
+        // (2x + 3)(-2x + 2)
+        // = -4x^2 + 4x -6x + 6
+        // = -4x^2 -2x + 6
+        Polynomial pRef = this.createPoly(2, -4, 1, -2, 0, 6);
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: multiplication with negative degrees.
+     */
+    @Test
+    public void testMultiplyNegativeDegrees() {
+        Polynomial p1 = this.createPoly(-1, 2); // 2x^-1
+        Polynomial p2 = this.createPoly(-2, 3); // 3x^-2
+
+        Polynomial pRef = this.createPoly(-3, 6); // 6x^-3
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: polynomials with large gaps in degrees.
+     */
+    @Test
+    public void testMultiplyLargeGap() {
+        Polynomial p1 = this.createPoly(8, 2); // 2x^8
+        Polynomial p2 = this.createPoly(3, 3); // 3x^3
+
+        Polynomial pRef = this.createPoly(11, 6); // 6x^11
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: mixture of positive and negative coefficients.
+     */
+    @Test
+    public void testMultiplyMixedSigns() {
+        Polynomial p1 = this.createPoly(2, -3, 0, 4); // -3x^2 + 4
+        Polynomial p2 = this.createPoly(1, 5, 0, -2); // 5x - 2
+
+        // Expansion:
+        // (-3x^2 + 4)(5x - 2)
+        // = -15x^3 + 6x + 20x - 8
+        // = -15x^3 + 26x - 8
+        Polynomial pRef = this.createPoly(3, -15, 2, 6, 1, 20, 0, -8);
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: simple polynomial with decimal coefficients.
+     */
+    @Test
+    public void testMultiplyDecimalSimple() {
+        Polynomial p1 = this.createPoly(1, 1.5, 0, 2.2); // 1.5x + 2.2
+        Polynomial p2 = this.createPoly(0, 3.0); // 3.0
+
+        Polynomial pRef = this.createPoly(1, 1.5 * 3.0, 0, 2.2 * 3.0);
+
+        assertEquals(pRef, p1.multiply(p2));
+    }
+
+    /**
+     * Test multiply: decimal coefficients with mixed signs.
+     */
+    @Test
+    public void testMultiplyDecimalMixedSigns() {
+
+        // p1 = -1.5x^2 + 3.25
+        Polynomial p1 = this.createPoly(2, -1.5, 0, 3.25);
+
+        // p2 = 2.4x - 0.5
+        Polynomial p2 = this.createPoly(1, 2.4, 0, -0.5);
+
+        /*
+         * Expansion: (-1.5x^2)(2.4x) = -3.6x^3 (-1.5x^2)(-0.5) = +0.75x^2
+         * (3.25)(2.4x) = +7.8x (3.25)(-0.5) = -1.625
+         *
+         * Result = -3.6x^3 + 0.75x^2 + 7.8x - 1.625
+         */
+        Polynomial pRef = this.createPoly(3, -3.6, 2, 0.75, 1, 7.8, 0, -1.625);
+
+        assertEquals(pRef, p1.multiply(p2));
     }
 
 }

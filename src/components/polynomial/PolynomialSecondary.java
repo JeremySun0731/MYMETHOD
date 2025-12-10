@@ -15,23 +15,31 @@ public abstract class PolynomialSecondary implements Polynomial {
     @Override
     public Polynomial add(Polynomial p) {
         assert p != null : "Violation of: p is not null";
+
         Polynomial result = this.newInstance();
         result.clear();
-        //add this to the result
-        for (int i = 0; i <= this.getDegree(); i++) {
-            double coefic = this.getCoefficient(i);
-            if (coefic != 0) {
-                result.setCoefficient(i, coefic);
+
+        //add p to this
+        for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
+            double coef = this.getCoefficient(i);
+            if (coef != 0.0) {
+                result.setCoefficient(i, coef);
             }
         }
 
-        for (int i = 0; i <= p.getDegree(); i++) {
-            double coefic = p.getCoefficient(i);
-            if (coefic != 0) {
-                double sum = result.getCoefficient(i) + coefic;
-                result.setCoefficient(i, sum);
+        // add p's coefficients
+        for (int i = p.getMinDegree(); i <= p.getDegree(); i++) {
+            double coef = p.getCoefficient(i);
+            if (coef != 0.0) {
+                double newCoef = result.getCoefficient(i) + coef;
+                if (newCoef == 0.0) {
+                    result.removeCoefficient(i);
+                } else {
+                    result.setCoefficient(i, newCoef);
+                }
             }
         }
+
         return result;
     }
 
@@ -45,23 +53,31 @@ public abstract class PolynomialSecondary implements Polynomial {
     @Override
     public Polynomial subtract(Polynomial p) {
         assert p != null : "Violation of: p is not null";
+
         Polynomial result = this.newInstance();
         result.clear();
-        //subtract p from this
-        for (int i = 0; i <= p.getDegree(); i++) {
-            double coefic = this.getCoefficient(i);
-            if (coefic != 0) {
-                result.setCoefficient(i, coefic);
+
+        for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
+            double coef = this.getCoefficient(i);
+            if (coef != 0.0) {
+                result.setCoefficient(i, coef);
             }
         }
 
-        for (int i = 0; i <= p.getDegree(); i++) {
-            double coefic = p.getCoefficient(i);
-            if (coefic != 0) {
-                double difference = result.getCoefficient(i) - coefic;
-                result.setCoefficient(i, difference);
+        for (int i = p.getMinDegree(); i <= p.getDegree(); i++) {
+            double coefP = p.getCoefficient(i);
+            if (coefP != 0.0) {
+
+                double newValue = result.getCoefficient(i) - coefP;
+
+                if (newValue == 0.0) {
+                    result.removeCoefficient(i);
+                } else {
+                    result.setCoefficient(i, newValue);
+                }
             }
         }
+
         return result;
     }
 
@@ -75,22 +91,31 @@ public abstract class PolynomialSecondary implements Polynomial {
     @Override
     public Polynomial multiply(Polynomial p) {
         assert p != null : "Violation of: p is not null";
+
         Polynomial result = this.newInstance();
         result.clear();
-        for (int i = 0; i <= this.getDegree(); i++) {
-            double coefic = this.getCoefficient(i);
-            if (coefic != 0) {
-                for (int j = 0; j <= p.getDegree(); j++) {
-                    double coef1 = p.getCoefficient(j);
-                    if (coef1 != 0) {
+
+        for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
+            double a = this.getCoefficient(i);
+            if (a != 0.0) {
+
+                for (int j = p.getMinDegree(); j <= p.getDegree(); j++) {
+                    double b = p.getCoefficient(j);
+                    if (b != 0.0) {
+
                         int degree = i + j;
-                        double newCoefficient = result.getCoefficient(degree)
-                                + coefic * coef1;
-                        result.setCoefficient(degree, newCoefficient);
+                        double newValue = result.getCoefficient(degree) + a * b;
+
+                        if (newValue == 0.0) {
+                            result.removeCoefficient(degree);
+                        } else {
+                            result.setCoefficient(degree, newValue);
+                        }
                     }
                 }
             }
         }
+
         return result;
     }
 
@@ -103,12 +128,20 @@ public abstract class PolynomialSecondary implements Polynomial {
     public Polynomial derivative() {
         Polynomial result = this.newInstance();
         result.clear();
-        for (int i = 1; i <= this.getDegree(); i++) {
-            double coeffi = this.getCoefficient(i);
-            if (coeffi != 0) {
-                result.setCoefficient(i - 1, i * coeffi);
+        // differentiate each term
+        for (int degree = this.getMinDegree(); degree <= this
+                .getDegree(); degree++) {
+            double coef = this.getCoefficient(degree);
+            // only differentiate non-zero terms with degree > 0
+            if (coef != 0 && degree > 0) {
+                double newCoef = coef * degree;
+                // only set if newCoef is not zero
+                if (newCoef != 0) {
+                    result.setCoefficient(degree - 1, newCoef);
+                }
             }
         }
+
         return result;
     }
 
@@ -120,15 +153,30 @@ public abstract class PolynomialSecondary implements Polynomial {
      */
     @Override
     public Polynomial integrate() {
-        assert this != null : "Violation of: p is not null";
         Polynomial result = this.newInstance();
         result.clear();
-        for (int i = 0; i <= this.getDegree(); i++) {
-            double coeffi = this.getCoefficient(i);
-            if (coeffi != 0) {
-                result.setCoefficient(i + 1, coeffi / (i + 1));
+        // integrate each term
+        for (int degree = this.getMinDegree(); degree <= this
+                .getDegree(); degree++) {
+
+            double coef = this.getCoefficient(degree);
+            // only integrate non-zero terms
+            if (coef != 0.0) {
+
+                // integral undefined for x^-1 term
+                if (degree == -1) {
+                    throw new ArithmeticException(
+                            "Integral undefined for x^-1 term (would require ln|x|).");
+                }
+                // compute new coefficient
+                double newCoef = coef / (degree + 1);
+                // only set if newCoef is not zero
+                if (newCoef != 0.0) {
+                    result.setCoefficient(degree + 1, newCoef);
+                }
             }
         }
+
         return result;
     }
 
@@ -142,7 +190,8 @@ public abstract class PolynomialSecondary implements Polynomial {
     public double evaluate(double x) {
         double result = 0.0;
 
-        for (int degree = 0; degree <= this.getDegree(); degree++) {
+        for (int degree = this.getMinDegree(); degree <= this
+                .getDegree(); degree++) {
             double coef = this.getCoefficient(degree);
             if (coef != 0.0) {
                 result += coef * Math.pow(x, degree);
@@ -159,7 +208,7 @@ public abstract class PolynomialSecondary implements Polynomial {
      */
     public boolean isZero() {
         boolean zero = true;
-        for (int i = 0; i <= this.getDegree(); i++) {
+        for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
             if (this.getCoefficient(i) != 0.0) {
                 zero = false;
             }
@@ -180,7 +229,8 @@ public abstract class PolynomialSecondary implements Polynomial {
         Polynomial result = this.newInstance();
         result.clear();
 
-        for (int degree = 0; degree <= this.getDegree(); degree++) {
+        for (int degree = this.getMinDegree(); degree <= this
+                .getDegree(); degree++) {
             double coef = this.getCoefficient(degree);
             if (coef != 0.0) {
                 result.setCoefficient(degree, coef * c);
@@ -197,7 +247,7 @@ public abstract class PolynomialSecondary implements Polynomial {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean firstTerm = true;
-        for (int i = this.getDegree(); i >= 0; i--) {
+        for (int i = this.getDegree(); i >= this.getMinDegree(); i--) {
             double coeff = this.getCoefficient(i);
             if (coeff != 0) {
                 if (!firstTerm) {
@@ -238,14 +288,18 @@ public abstract class PolynomialSecondary implements Polynomial {
         } else if (!(obj instanceof Polynomial other)) {
             result = false;
         } else {
-            // compare degrees
-            if (this.getDegree() != other.getDegree()) {
+            // compare degree ranges
+            if (this.getDegree() != other.getDegree()
+                    || this.getMinDegree() != other.getMinDegree()) {
                 result = false;
             } else {
-                // compare coefficients
-                for (int i = 0; i <= this.getDegree() && result; i++) {
-                    if (Double.compare(this.getCoefficient(i),
-                            other.getCoefficient(i)) != 0) {
+                final double EPS = 1e-9;
+
+                for (int i = this.getMinDegree(); i <= this.getDegree()
+                        && result; i++) {
+                    double a = this.getCoefficient(i);
+                    double b = other.getCoefficient(i);
+                    if (Math.abs(a - b) > EPS) {
                         result = false;
                     }
                 }
@@ -262,11 +316,12 @@ public abstract class PolynomialSecondary implements Polynomial {
     public int hashCode() {
         int hash = 1;
 
-        for (int i = 0; i <= this.getDegree(); i++) {
+        for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
             double coeff = this.getCoefficient(i);
             hash = 31 * hash + Double.hashCode(coeff);
         }
 
         return hash;
     }
+
 }

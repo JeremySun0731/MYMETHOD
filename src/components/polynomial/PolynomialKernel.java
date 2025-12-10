@@ -24,25 +24,30 @@ import components.standard.Standard;
 public interface PolynomialKernel extends Standard<Polynomial> {
 
     /**
-     * change the known coefficient of the specific degree.
+     * Sets the coefficient of the given degree to the specified non-zero value.
      *
      * @param degree
-     *            the target degree of polynomial
+     *            the degree whose coefficient is to be changed
      * @param value
-     *            the new number of the target polynomial
-     * @requires degree != 0
-     * @ensures coefficient(degree) = value
+     *            the new non-zero coefficient for this degree
+     *
+     * @requires value != 0.0
+     * @ensures this = #this with coefficient(degree) replaced by value
      */
+
     void setCoefficient(int degree, double value);
 
     /**
-     * get the efficient of the known polynomial.
+     * Returns the coefficient associated with the given degree.
      *
      * @param degree
-     *            the specific degree
-     * @return the value of specific degree's coefficient
-     * @ensures result = coefficient(degree)
+     *            the target degree
+     * @return the coefficient of this polynomial at the given degree; returns
+     *         0.0 if no such term exists
+     *
+     * @ensures getCoefficient = coefficient(this, degree)
      */
+
     double getCoefficient(int degree);
 
     /**
@@ -62,4 +67,11 @@ public interface PolynomialKernel extends Standard<Polynomial> {
      */
     int getDegree();
 
+    /**
+     * return the lowest degree of polynomial.
+     *
+     * @return the minimum degree of the polynomial
+     * @ensure result = minDegree(this)
+     */
+    int getMinDegree();
 }

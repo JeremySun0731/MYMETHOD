@@ -49,8 +49,20 @@ public class Polynomial1L extends PolynomialSecondary {
     }
 
     @Override
-    public final void setCoefficient(int degree, double value) {
+    public final void clear() {
+        this.rep.clear();
+    }
 
+    @Override
+    public final Polynomial newInstance() {
+        // create and return a new Polynomial1L instance
+        return new Polynomial1L();
+    }
+
+    @Override
+    public final void setCoefficient(int degree, double value) {
+        assert value != 0.0 : "Violation: coefficient cannot be zero";
+        // set the coefficient of the specific degree to the given value
         if (this.rep.hasKey(degree)) {
             this.rep.replaceValue(degree, value);
         } else {
@@ -82,14 +94,15 @@ public class Polynomial1L extends PolynomialSecondary {
     public final int getDegree() {
 
         int result = 0; // default for empty polynomial
-
+        // iterate through the map to find the maximum degree
         boolean first = true;
         for (Map.Pair<Integer, Double> pair : this.rep) {
-
+            // on the first iteration, set result to the first key
             if (first) {
                 result = pair.key();
                 first = false;
             } else {
+                // update result if the current key is greater
                 int degree = pair.key();
                 if (degree > result) {
                     result = degree;
@@ -101,14 +114,21 @@ public class Polynomial1L extends PolynomialSecondary {
     }
 
     @Override
-    public final void clear() {
-        this.rep.clear();
-    }
-
-    @Override
-    public final Polynomial newInstance() {
-        // create and return a new Polynomial1L instance
-        return new Polynomial1L();
+    public final int getMinDegree() {
+        int result = 0;
+        boolean first = true;
+        for (Map.Pair<Integer, Double> pair : this.rep) {
+            if (first) {
+                result = pair.key();
+                first = false;
+            } else {
+                int degree = pair.key();
+                if (degree < result) {
+                    result = degree;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
