@@ -2,6 +2,7 @@ package components.polynomial;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -1585,8 +1586,12 @@ public abstract class PolynomialTest {
         assertTrue(p.isZero());
     }
 
+    // --------------------------------------
+    // Test 8: scale()
+    // --------------------------------------
     /**
-     * Test scale: normal polynomial with positive scale factor.
+     *
+     * /** Test scale: normal polynomial with positive scale factor.
      */
     @Test
     public void testScaleNormal() {
@@ -1653,10 +1658,58 @@ public abstract class PolynomialTest {
     }
 
     // --------------------------------------
-    // Test 7: equals()
+    // Test 9: toString()
     // --------------------------------------
     /**
-     * Test equals: same object.
+     * Tests toString on the zero polynomial.
+     */
+    @Test
+    public void testToStringZero() {
+        Polynomial p = this.createPoly();
+        assertEquals("0", p.toString());
+    }
+
+    /**
+     * Tests toString on a constant polynomial with a positive value.
+     */
+    @Test
+    public void testToStringConstant() {
+        Polynomial p = this.createPoly(0, 5.0);
+        assertEquals("5.0", p.toString());
+    }
+
+    /**
+     * Tests toString on a linear polynomial with positive coefficients.
+     */
+    @Test
+    public void testToStringLinear() {
+        Polynomial p = this.createPoly(1, 3.0, 0, 2.0);
+        assertEquals("3.0x + 2.0", p.toString());
+    }
+
+    /**
+     * Tests toString when the leading coefficient is negative.
+     */
+    @Test
+    public void testToStringLeadingNegative() {
+        Polynomial p = this.createPoly(2, -4.0, 1, 3.0, 0, -1.0);
+        assertEquals("-4.0x^2 + 3.0x - 1.0", p.toString());
+    }
+
+    /**
+     * Tests that a coefficient of 1 is printed without the numeric part.
+     */
+    @Test
+    public void testToStringCoefficientOne() {
+        Polynomial p = this.createPoly(2, 1.0, 1, -1.0);
+        assertEquals("x^2 - x", p.toString());
+    }
+
+    // --------------------------------------
+    // Test 10: equals()
+    // --------------------------------------
+    /**
+     * /** Test equals: same object.
      */
     @Test
     public void testEqualsSameObject() {
@@ -1720,6 +1773,82 @@ public abstract class PolynomialTest {
         Polynomial p2 = this.createPoly(1, 1.000000002);
 
         assertEquals(true, p1.equals(p2)); // within EPS
+    }
+
+    // --------------------------------------
+    // Test 11: toString()
+    // --------------------------------------
+    /**
+     * Tests that two equal polynomials produce the same hashCode.
+     */
+    @Test
+    public void testHashCodeEqualObjects() {
+        Polynomial p1 = this.createPoly(2, 3.0, 1, -1.0, 0, 5.0);
+        Polynomial p2 = this.createPoly(2, 3.0, 1, -1.0, 0, 5.0);
+
+        assertTrue(p1.equals(p2));
+        assertEquals(p1.hashCode(), p2.hashCode());
+    }
+
+    /**
+     * Tests that two different polynomials generally produce different hash
+     * codes.
+     */
+    @Test
+    public void testHashCodeDifferentObjects() {
+        Polynomial p1 = this.createPoly(2, 3.0);
+        Polynomial p2 = this.createPoly(2, 4.0); // different coefficient
+
+        assertFalse(p1.equals(p2));
+        assertNotEquals(p1.hashCode(), p2.hashCode());
+    }
+
+    /**
+     * Tests that the zero polynomial produces a stable hash code.
+     */
+    @Test
+    public void testHashCodeZeroPolynomial() {
+        Polynomial p = this.createPoly();
+
+        int h1 = p.hashCode();
+        int h2 = p.hashCode();
+
+        assertEquals(h1, h2);
+    }
+
+    /**
+     * Tests hashCode for polynomials that contain negative degrees.
+     */
+    @Test
+    public void testHashCodeNegativeDegrees() {
+        Polynomial p1 = this.createPoly(2, 3.0, -1, 4.0);
+        Polynomial p2 = this.createPoly(2, 3.0, -1, 4.0);
+
+        assertEquals(p1.hashCode(), p2.hashCode());
+    }
+
+    /**
+     * Tests that removing a term changes the hashCode.
+     */
+    @Test
+    public void testHashCodeRemoveCoefficient() {
+        Polynomial p1 = this.createPoly(3, 2.0, 1, 4.0);
+        Polynomial p2 = this.createPoly(3, 2.0);
+
+        assertNotEquals(p1.hashCode(), p2.hashCode());
+    }
+
+    /**
+     * Ensures hashCode complies with the equals contract: if two objects are
+     * equal, their hashCodes must match.
+     */
+    @Test
+    public void testHashCodeEqualsContract() {
+        Polynomial p1 = this.createPoly(4, 1.0, 2, -3.0);
+        Polynomial p2 = this.createPoly(4, 1.0, 2, -3.0);
+
+        assertTrue(p1.equals(p2));
+        assertEquals(p1.hashCode(), p2.hashCode());
     }
 
 }
