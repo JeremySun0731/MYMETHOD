@@ -1,90 +1,215 @@
-# Portfolio Project
+Polynomial Component — Portfolio Project
 
-The purpose of this repo is to provide a framework for creating your own
-component in the software sequence discipline. If you were unsure whether
-or not to make your own, consider the following testimonial:
+This project implements a complete Polynomial software component following the OSU Software Component methodology. The goal is to design a reusable mathematical data type that supports both kernel operations and higher-level algebraic and calculus operations.
 
-> I really enjoyed the portfolio project! It gave me a stronger understanding
-> of the OSU software discipline while also giving me the flexibility to
-> design something that reflected my interests. This made the experience
-> rewarding and enjoyable as I created a product I was proud of!
+This repository includes:
 
-## Recommended Steps to Get Started
+A fully implemented Polynomial component (Polynomial, PolynomialKernel, PolynomialSecondary, Polynomial1L)
 
-When starting your portfolio project, the following steps should make your life
-a bit easier.
+A comprehensive JUnit test suite
 
-### Step 1: Create a Repo From This Template
+Two qualitatively different use-case programs
 
-<!-- TODO: use GitHub to create a repo from this template -->
+A changelog documenting updates
 
-Assuming you're reading this README from GitHub, you can make use of this
-repo by clicking the `Use this template` button in the top-right corner of
-this page. If you can't find the button, [this link][use-this-template] 
-should work as well. Personally, I would recommend using the 
-`Create a new repository` option, which will allow you to name the 
-repository after your component. Given that you will be submitting pull 
-requests to me through Carmen, you'll want to make sure your repository 
-is public. Then, you can click `Create repository`. After that, you can 
-go through all the usual steps of cloning a repository on your system to 
-get to work. I use GitHub Desktop to clone projects, and it has a nice 
-feature of letting you open a repo directly in VSCode from the 
-`Repository` menu.
+A written reflection about the development process
 
-### Step 2: Install Recommended Plugins
+Component Overview
 
-<!-- TODO: install recommended plugins and delete this comment -->
+This component models a mathematical polynomial of the form:
 
-When you open VSCode with this project, you should get a notification in the
-bottom right corner that there are some recommended extensions to install.
-Click install all. If you ignored this message or it never came up, feel free
-to press CTRL+SHIFT+P and type "Show Recommended Extensions". Install all of the
-extensions listed.
+P(x) = Σ (a_d * x^d)
 
-### Step 3: Install the Latest JDK
 
-<!-- TODO: install latest JDK and delete this comment -->
+It supports sparse representation, meaning only non-zero coefficients are stored. Degrees may be positive or negative integers.
 
-If you do not have an available JDK on your system, you may be prompted to
-install one by VSCode. The default seems to be Red Hat's OpenJDK, which seems to
-require you to register for an account or to install on the command line.
-Regardless, there is no mac support. As a result, I would just recommend
-installing the latest JDK [directly from Oracle's site][jdk-downloads].
+Features
 
-### Step 4: Add Key Libraries to Project
+Set, get, and remove coefficients
 
-<!-- TODO: add key libraries to project and delete this comment -->
+Retrieve maximum and minimum degree
 
-As you are probably all aware at this point, you need the components jar to get
-anything running. My advice is to [download it from here][components-jar]. Then,
-drop it into the `lib` folder in the project. Git automatically ignores anything
-you put here by default, so don't worry about committing it to version control.
+Create new instances and clear the polynomial
 
-Similarly, you will need the testing APIs (e.g., JUnit). Perhaps the easiest way
-to include them in your project is to click the beaker symbol in the left
-sidebar; it's right below the extensions button which looks like four squares.
-If you do not see this button, try creating a Java file in `src`. From there, 
-you can click "Enable Java Tests" and then click "JUnit" from the
-dropdown. That's it! You should now see the two JUnit libraries in the lib
-folder.
+Algebraic operations: addition, subtraction, multiplication, scaling
 
-**Note**: if you're using VSCode for class projects, you might be wondering
-why you never had to do this. In general, it's bad practice to commit binaries
-to version control. However, we have no way of managing dependencies with the
-custom `components.jar`, so I included them directly in the template. I did not
-include them here, so you could see how it might be done from scratch. If at any
-point you're struggling with Step 3, just copy the lib folder from the monorepo
-template.
+Calculus operations: derivative and indefinite integral
 
-## Next Steps
+Polynomial evaluation at any real number
 
-<!-- TODO: navigate to part 1 of the portfolio project and delete this comment -->
+String formatting
 
-Now that you have everything setup, you can begin crafting your component. There
-will be deadlines for each step in Carmen, but you're free to complete each step
-as early as you'd like. To start, you'll want to visit the [doc](doc/) directory
-for each assignment file.
+Equality checking with floating-point tolerance
 
-[components-jar]: https://cse22x1.engineering.osu.edu/common/components.jar
-[jdk-downloads]: https://www.oracle.com/java/technologies/downloads/
-[use-this-template]: https://github.com/new?template_name=portfolio-project&template_owner=jrg94
+Hash code generation
+
+Component Architecture
+
+The implementation follows the OSU layered component design:
+
+1. PolynomialKernel
+
+Defines the core operations and contracts:
+
+setCoefficient
+
+getCoefficient
+
+removeCoefficient
+
+getDegree
+
+getMinDegree
+
+newInstance
+
+clear
+
+2. PolynomialSecondary
+
+Provides secondary operations built entirely from kernel operations:
+
+Addition, subtraction, multiplication
+
+Derivative, integrate
+
+Evaluation
+
+Scaling
+
+toString, equals, hashCode
+
+3. Polynomial1L
+
+Provides the concrete representation:
+
+Map<Integer, Double>
+
+
+Only non-zero terms are stored, producing an efficient and sparse implementation.
+
+Testing
+
+The JUnit test suite (Polynomial1LTest) verifies all kernel and secondary methods.
+Tests cover:
+
+Setting, replacing, and removing coefficients
+
+Behavior with positive, zero, and negative degrees
+
+Degree and minimum degree behavior for empty and non-empty polynomials
+
+Algebra operations for normal, mixed, and edge cases
+
+Derivative and integral correctness (including the undefined integral of x^-1)
+
+Evaluation at multiple input values
+
+String formatting across signs, degrees, and coefficient types
+
+Equality with floating-point tolerance
+
+Hash code consistency
+
+This test suite satisfies the requirement for a thorough test plan covering the entire codebase.
+
+Use Cases
+
+Two use cases are included to demonstrate the range of possible applications.
+
+Use Case 1: QuadraticSolver
+
+File: components/QuadraticSolver.java
+
+This example uses only kernel operations to:
+
+Construct a quadratic polynomial
+
+Extract coefficients
+
+Compute the discriminant
+
+Solve for real roots
+
+Remove terms and clear the polynomial
+
+Convert the polynomial to a readable format
+
+This demonstrates numerical computation using the kernel interface alone.
+
+Use Case 2: FunctionAnalysis
+
+File: components/FunctionAnalysis.java
+
+This example uses secondary operations to:
+
+Display a polynomial
+
+·Compute its derivative
+
+·Compute its indefinite integral
+
+·Evaluate the polynomial at several inputs
+
+·Add, subtract, and multiply two polynomials
+
+This demonstrates symbolic manipulation, calculus operations, and combined polynomial algebra.
+
+How to Run
+
+Compile and run from the project root:
+
+javac src/components/polynomial/*.java
+javac src/components/*.java
+java components.QuadraticSolver
+java components.FunctionAnalysis
+
+
+To run the test suite, open the test directory in VS Code or IntelliJ and run Polynomial1LTest.java.
+
+Reflection Summary
+
+·Through this project, I gained practical experience in software component design, including:
+
+·Designing abstractions and selecting appropriate representations
+
+·Identifying edge cases such as negative degrees and undefined integrals
+
+·Applying design-by-contract through preconditions and postconditions
+
+·Writing comprehensive unit tests
+
+·Debugging and revising code based on test feedback
+
+·This project reinforced my interest in backend development and improved my ability to think about structure, contracts, and component reliability.
+
+·A full reflection is included in the repository as required.
+
+Changelog
+
+A complete development history is documented in:
+
+CHANGELOG.md
+
+
+It includes entries for testing, use-case creation, bug fixing, documentation improvements, and structural updates.
+
+Repository Structure
+src/
+  components/
+    polynomial/
+      Polynomial.java
+      PolynomialKernel.java
+      PolynomialSecondary.java
+      Polynomial1L.java
+    QuadraticSolver.java
+    FunctionAnalysis.java
+test/
+  components/
+    polynomial/
+      Polynomial1LTest.java
+doc/
+  06-component-finishing-touches/
+CHANGELOG.md
+README.md
+LICENSE

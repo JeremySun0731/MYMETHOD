@@ -1,8 +1,8 @@
 # Portfolio Part 6: Finishing Touches
 
-- **Name**: <!-- TODO: fill with first and last name (e.g., Brutus Buckeye) and delete this comment -->
-- **Dot Number**: <!-- TODO: fill with OSU dot number (e.g., buckeye.17) and delete this comment -->
-- **Due Date**: <!-- TODO: fill out with due date and time (e.g., 10/17 @ 3:10 PM EST) and delete this comment -->
+- **Name**: Jeremy Sun
+- **Dot Number**: sun.3879
+- **Due Date**: Dec 10th 2025
 
 ## Assignment Overview
 
@@ -50,7 +50,7 @@ course, but just knowing about them could set you up for long term success.
 
 ## Assignment Checklist
 
-<!-- TODO: browse the checklist then delete this comment -->
+
 
 To be sure you have completed everything on this assignment, we have littered
 this document with TODO comments. You can browse all of them in VSCode by
@@ -141,7 +141,7 @@ to see them. If you don't like this workflow, you may try following the
 rebase strategies described [here](https://stackoverflow.com/questions/35790561/working-while-waiting-for-pending-pr)
 and [here](https://stackoverflow.com/questions/18021888/continue-working-on-a-git-branch-after-making-a-pull-request).
 
-<!-- TODO: make a new branch from main then delete this comment -->
+
 
 ## Assignment Tasks
 
@@ -307,18 +307,23 @@ Take some time to fill them out honestly.
 > complete the portfolio project, how much better (or worse) do you think you
 > understand software development and why?
 
-<!-- TODO: discuss -->
+No I will say this is only a basic component designning, not the real backend developing
+or front end developing. If I have chance, I will do the large project.
 
 > Also, did the portfolio project surface any gaps in your own knowledge of
-> software development. If so, what are those gaps and how did you address them?
+> software development. If so, what are those gaps and how did you address them???
 
-<!-- TODO: discuss -->
+Yes, for example I found myself cannot consider questions as more as possible. Like,
+exponent should sometimes be positive sometimes be negative. However, I did not consider this factor
+before the developing the project. When I am doing the project, sometimes I fixed this on the
+half way. By the way I do not know the relationship between these files and I asked my professor.
 
 > Finally, as a part of completing the portfolio project, to what extent has
 > your perspective of software development changed, if at all? In other words,
 > is software development something you still enjoy? If not, why not?
 
-<!-- TODO: discuss -->
+My perspective does not change. I enjoy software developing because it is the way
+to solve questions. I like code looks like poem.
 
 > One of the challenges of completing the portfolio project is picking up a lot
 > of skills on your own. Some of these skills are, of course, software skills.
@@ -326,29 +331,42 @@ Take some time to fill them out honestly.
 > this process. Therefore, the first question is what skills did you pick up
 > through this process?
 
-<!-- TODO: discuss -->
+I leart through this project is design thinking. I leart how to define problems as
+early as possible,think through possible solutions, dehug and solve questions as many times as possible .
+These can improve my patient when I am doing project.
 
 > The follow-up question is: could you rephrase these skills you picked up
 > as bullet points that you could put on a resume? Try it below.
 
-<!-- TODO: discuss -->
+·Design thinking
+·debugging
+·planing
+·problem identification and problem solving
 
 > Next, how has working on this project affected your career trajectory?
 > In other words, do you now hate the topic you picked? Or, are you even more
 > interested in it? Both outcomes are valuable to your personal development.
 
-<!-- TODO: discuss -->
+It makes me feel a little bit understand of the backend I can know what is the logic of the backend
+It is a good way for e to understand the backend. Then when I was doing with test cases, it is a very
+good way for me to have a brain storm which is important tobe a developer
 
 > Finally, consider the skills you've picked up and your current career
 > trajectory. What are some things you could do to continue on your
 > career trajectory? Also, who are some mentors you could contact to help
 > you stay on your path?
 
-<!-- TODO: discuss -->
+Soft skills:
+I learned how to identify problems, make plans to solve them, and follow through until the solution is completed.
+
+Hard skills:
+Spring Boot, React, general coding skills, and basic knowledge of distributed microservices and cloud technologies.
+
+Career development:
+To continue on my career path, I will join my school’s tech club and the local engineering association. I will also reach out to my friend’s dad, who used to be a software developer, for career advice and mentorship.
 
 ### Changelog
 
-<!-- TODO: update CHANGELOG then delete this comment -->
 
 At the end of every assignment, you should update the
 [CHANGELOG.md](../../CHANGELOG.md) file found in the root of the project folder.
@@ -367,8 +385,8 @@ the following form: YYYY.0M.0D.
 
 ### Added
 
-- Designed test suite for <!-- insert name of component here --> component
-- Designed two different use cases for <!-- insert name of component here --> component
+- Designed test suite for Polynomial component
+- Designed two different use cases for Polynomial component
 
 ### Updated
 
@@ -384,7 +402,7 @@ request merge (or at least tag your commits). This is not required.
 
 ### Submission
 
-<!-- TODO: read the submission instructions then delete this comment -->
+
 
 Assuming that your project is in a GitHub repo somewhere and your changes are on
 a proof-of-concept branch, then what we'll want you to do is create a pull
