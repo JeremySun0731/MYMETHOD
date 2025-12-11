@@ -7,6 +7,19 @@ and this project adheres to [Calendar Versioning](https://calver.org/) of
 the following form: YYYY.0M.0D.
 
 ## [Unreleased]
+## [2025.12.10]
+### Added
+- Added comprehensive JUnit test suite covering all kernel and secondary methods of the Polynomial component.
+- Added two use-case classes (`QuadraticSolver` and `FunctionAnalysis`) demonstrating qualitatively different applications of the Polynomial component.
+
+### Updated
+- Updated implementations of several Polynomial methods after identifying edge-case issues during testing.
+- Improved overall code clarity and documentation based on feedback from testing and debugging.
+
+### Added (Documentation)
+- Added full reflection section discussing development process, challenges, and personal growth as part of the final project submission.
+
+
 #### [2025.11.21]
 - Created `Polynomial1L.java` interface file.
 - Added method stubs: `Polynomial1L`, `clear`, `newPolynomial`, `setCoefficient`,`getCoefficient`, `getDegree`, `newInstance`.
