@@ -1075,7 +1075,7 @@ public abstract class PolynomialTest {
     }
 
     // --------------------------------------
-    // Test 1: subtract()
+    // Test 2: subtract()
     // --------------------------------------
     @Test
     public void testSubtractNormalOverlap() {
@@ -1159,9 +1159,9 @@ public abstract class PolynomialTest {
         assertEquals(pRef, p1.subtract(p2));
     }
 
-    /**
-     * Test multiply: normal case with overlapping exponents.
-     */
+    // --------------------------------------
+    // Test 3: multiply()
+    // --------------------------------------
     /**
      * Test multiply: normal case with overlapping exponents.
      */
@@ -1311,6 +1311,415 @@ public abstract class PolynomialTest {
         Polynomial pRef = this.createPoly(3, -3.6, 2, 0.75, 1, 7.8, 0, -1.625);
 
         assertEquals(pRef, p1.multiply(p2));
+    }
+
+    // --------------------------------------
+    // Test 4: derivative()
+    // --------------------------------------
+    /**
+     * Test derivative: normal case.
+     */
+    @Test
+    public void testDerivativeNormal() {
+        // p = 5x^3 + 2x^1 + 1
+        Polynomial p = this.createPoly(3, 5, 1, 2, 0, 1);
+
+        // p' = 15x^2 + 2
+        Polynomial pRef = this.createPoly(2, 15, 0, 2);
+
+        assertEquals(pRef, p.derivative());
+    }
+
+    /**
+     * Test derivative: constant becomes zero.
+     */
+    @Test
+    public void testDerivativeConstant() {
+        Polynomial p = this.createPoly(0, 7); // p = 7
+        Polynomial pRef = this.createPoly(); // p' = 0
+        assertEquals(pRef, p.derivative());
+    }
+
+    @Test
+    public void testDerivativeNegativeExponent() {
+        // p = 4x^-2 + 3x + 2
+        Polynomial p = this.createPoly(-2, 4, 1, 3, 0, 2);
+
+        // p' = -8x^-3 + 3
+        Polynomial pRef = this.createPoly(-3, -8, 0, 3);
+
+        assertEquals(pRef, p.derivative());
+    }
+
+    /**
+     * Test derivative: mix of positive and negative exponents.
+     */
+    @Test
+    public void testDerivativeMixedSigns() {
+
+        // p = -3x^4 + 2x^-1
+        Polynomial p = this.createPoly(4, -3, -1, 2);
+
+        // p' = -12x^3 - 2x^-2
+        Polynomial pRef = this.createPoly(3, -12, -2, -2);
+
+        assertEquals(pRef, p.derivative());
+    }
+
+    // --------------------------------------
+    // Test 5: integrate()
+    // --------------------------------------
+    /**
+     * Test integrate: zero stays zero (constant = 0).
+     */
+    @Test
+    public void testIntegrateZero() {
+        Polynomial p = this.createPoly();
+        Polynomial pRef = this.createPoly();
+        assertEquals(pRef, p.integrate());
+    }
+
+    /**
+     * Test integrate: sparse polynomial with gaps.
+     */
+    @Test
+    public void testIntegrateSparse() {
+        // p = 10x^5 + 3
+        Polynomial p = this.createPoly(5, 10, 0, 3);
+
+        // ∫p dx = (10/6)x^6 + 3x = 1.6666x^6 + 3x
+        Polynomial pRef = this.createPoly(6, 10.0 / 6.0, 1, 3);
+
+        assertEquals(pRef, p.integrate());
+    }
+
+    /**
+     * Test derivative: decimal coefficients with positive exponents.
+     */
+    @Test
+    public void testDerivativeDecimalPositive() {
+        Polynomial p = this.createPoly(3, 2.5, 1, -0.75, 0, 1.2); // 2.5x^3 − 0.75x + 1.2
+
+        Polynomial pRef = this.createPoly(2, 7.5, 0, -0.75); // 7.5x^2 − 0.75
+
+        assertEquals(pRef, p.derivative());
+    }
+
+    /**
+     * Test derivative: decimal coefficients with negative exponents.
+     */
+    @Test
+    public void testDerivativeDecimalNegativeExponent() {
+        Polynomial p = this.createPoly(-2, -1.5, // -1.5x^-2
+                0, 3.25 // + 3.25
+        );
+
+        Polynomial pRef = this.createPoly(-3, 3.0 // 3.0x^-3
+        );
+
+        assertEquals(pRef, p.derivative());
+    }
+
+    // --------------------------------------
+    // Test 5: integrate()
+    // --------------------------------------
+    /**
+     * Test integrate: constant becomes linear term.
+     */
+    @Test
+    public void testIntegrateConstant() {
+        Polynomial p = this.createPoly(0, 7.0 // 7
+        );
+
+        Polynomial pRef = this.createPoly(1, 7.0 // 7x
+        );
+
+        assertEquals(pRef, p.integrate());
+    }
+
+    /**
+     * Test integrate: decimal coefficients, positive exponents.
+     */
+    @Test
+    public void testIntegrateDecimalPositive() {
+        Polynomial p = this.createPoly(2, 3.0, 1, -0.8, 0, 1.5);
+
+        Polynomial pRef = this.createPoly(3, 1.0, // 3 / 3 = 1
+                2, -0.4, // -0.8 / 2
+                1, 1.5 // 1.5 / 1
+        );
+
+        assertEquals(pRef, p.integrate());
+    }
+
+    /**
+     * Test integrate: supports negative exponents.
+     */
+    @Test
+    public void testIntegrateNegativeExponent() {
+        Polynomial p = this.createPoly(-2, 4.0 // 4x^-2
+        );
+
+        Polynomial pRef = this.createPoly(-1, -4.0 // -4x^-1
+        );
+
+        assertEquals(pRef, p.integrate());
+    }
+
+    /**
+     * Test integrate: mix of positive and negative exponents (no -1).
+     */
+    @Test
+    public void testIntegrateMixedExponents() {
+        Polynomial p = this.createPoly(3, -1.5, -2, 2.0, 0, -0.75);
+
+        Polynomial pRef = this.createPoly(4, -0.375, -1, -2.0, 1, -0.75);
+
+        assertEquals(pRef, p.integrate());
+    }
+
+    // --------------------------------------
+    // Test 6: evaluate()
+    // --------------------------------------
+    /**
+     * Test evaluate: constant polynomial.
+     */
+    @Test
+    public void testEvaluateConstant() {
+        Polynomial p = this.createPoly(0, 7.0);
+
+        assertEquals(7.0, p.evaluate(10.0), 0.0001);
+    }
+
+    /**
+     * Test evaluate: positive exponents.
+     */
+    @Test
+    public void testEvaluatePositive() {
+        Polynomial p = this.createPoly(3, 2.0, 1, -1.0, 0, 4.0);
+
+        assertEquals(18.0, p.evaluate(2.0), 0.0001);
+    }
+
+    /**
+     * Test evaluate: negative exponents.
+     */
+    @Test
+    public void testEvaluateNegativeExponents() {
+        Polynomial p = this.createPoly(-2, 3.0, -1, 2.0);
+
+        assertEquals(1.75, p.evaluate(2.0), 0.0001);
+    }
+
+    /**
+     * Test evaluate: mixed exponents with decimals.
+     */
+    @Test
+    public void testEvaluateMixed() {
+        Polynomial p = this.createPoly(2, 1.5, -1, -0.5, 0, 3.0);
+
+        assertEquals(8.75, p.evaluate(2.0), 0.0001);
+    }
+
+    /**
+     * Test evaluate: evaluate at x = 0 (no negative exponents allowed).
+     */
+    @Test
+    public void testEvaluateAtZero() {
+        Polynomial p = this.createPoly(3, 4.0, 1, -2.0, 0, 1.0);
+
+        assertEquals(1.0, p.evaluate(0.0), 0.0001);
+    }
+
+    // --------------------------------------
+    // Test 7: isZero()
+    // --------------------------------------
+    /**
+     * Test isZero: true for zero polynomial.
+     */
+    @Test
+    public void testIsZeroTrue() {
+        Polynomial p = this.createPoly(); // empty => zero polynomial
+        assertTrue(p.isZero());
+    }
+
+    /**
+     * Test isZero: false for non-zero polynomial.
+     */
+    @Test
+    public void testIsZeroFalse() {
+        Polynomial p = this.createPoly(0, 5.0);
+
+        assertFalse(p.isZero());
+    }
+
+    /**
+     * Test isZero: negative exponent non-zero.
+     */
+    @Test
+    public void testIsZeroNegativeExponent() {
+        Polynomial p = this.createPoly(-1, 3.0);
+
+        assertFalse(p.isZero());
+    }
+
+    /**
+     * Test isZero: becomes zero after clear().
+     */
+    @Test
+    public void testIsZeroAfterClear() {
+        Polynomial p = this.createPoly(2, 2.0, 0, 1.0);
+
+        p.clear(); // remove all terms
+
+        assertTrue(p.isZero());
+    }
+
+    /**
+     * Test isZero: all coefficients explicitly zero.
+     */
+    @Test
+    public void testIsZeroExplicitZeroCoefficients() {
+        Polynomial p = this.createPoly(2, 0.0, 1, 0.0, 0, 0.0);
+
+        assertTrue(p.isZero());
+    }
+
+    /**
+     * Test scale: normal polynomial with positive scale factor.
+     */
+    @Test
+    public void testScaleNormal() {
+        Polynomial p = this.createPoly(3, 2.0, 1, -4.0, 0, 3.0);
+
+        Polynomial pRef = this.createPoly(3, 6.0, 1, -12.0, 0, 9.0);
+
+        assertEquals(pRef, p.scale(3.0));
+    }
+
+    /**
+     * Test scale: constant polynomial.
+     */
+    @Test
+    public void testScaleConstant() {
+        Polynomial p = this.createPoly(0, 5.0); // 5
+
+        Polynomial pRef = this.createPoly(0, -15.0); // 5 × (-3)
+
+        assertEquals(pRef, p.scale(-3.0));
+    }
+
+    /**
+     * Test scale: polynomial becomes zero after scaling.
+     */
+    @Test
+    public void testScaleToZero() {
+        Polynomial p = this.createPoly(2, 1.5, 0, -0.5);
+
+        Polynomial pRef = this.createPoly(); // expected zero polynomial
+
+        assertEquals(pRef, p.scale(0.0));
+    }
+
+    /**
+     * Test scale: supports negative exponents.
+     */
+    @Test
+    public void testScaleNegativeExponent() {
+        Polynomial p = this.createPoly(-2, 4.0, // 4x^-2
+                -1, -3.0 // -3x^-1
+        );
+
+        Polynomial pRef = this.createPoly(-2, -8.0, // 4 × (-2)
+                -1, 6.0 // -3 × (-2)
+        );
+
+        assertEquals(pRef, p.scale(-2.0));
+    }
+
+    /**
+     * Test scale: mixed positive & negative coefficients with decimal factor.
+     */
+    @Test
+    public void testScaleDecimal() {
+        Polynomial p = this.createPoly(2, -1.5, 1, 4.0, 0, 0.25);
+
+        Polynomial pRef = this.createPoly(2, -0.75, // -1.5 × 0.5
+                1, 2.0, // 4 × 0.5
+                0, 0.125 // 0.25 × 0.5
+        );
+
+        assertEquals(pRef, p.scale(0.5));
+    }
+
+    // --------------------------------------
+    // Test 7: equals()
+    // --------------------------------------
+    /**
+     * Test equals: same object.
+     */
+    @Test
+    public void testEqualsSameObject() {
+        Polynomial p = this.createPoly(2, 3.0, 0, -1.0);
+        assertEquals(true, p.equals(p));
+    }
+
+    /**
+     * Test equals: equal polynomials with same terms.
+     */
+    @Test
+    public void testEqualsSamePolynomial() {
+        Polynomial p1 = this.createPoly(3, 2.0, 1, -1.0, 0, 4.0);
+
+        Polynomial p2 = this.createPoly(3, 2.0, 1, -1.0, 0, 4.0);
+
+        assertEquals(true, p1.equals(p2));
+    }
+
+    /**
+     * Test equals: different degree range -> false.
+     */
+    @Test
+    public void testEqualsDifferentDegrees() {
+        Polynomial p1 = this.createPoly(3, 1.0); // highest degree = 3
+        Polynomial p2 = this.createPoly(2, 1.0); // highest degree = 2
+
+        assertEquals(false, p1.equals(p2));
+    }
+
+    /**
+     * Test equals: coefficients differ -> false.
+     */
+    @Test
+    public void testEqualsDifferentCoefficient() {
+        Polynomial p1 = this.createPoly(2, 3.0, 1, 1.0);
+
+        Polynomial p2 = this.createPoly(2, 3.0, 1, 2.0 // coefficient differs
+        );
+
+        assertEquals(false, p1.equals(p2));
+    }
+
+    /**
+     * Test equals: compare with non-polynomial object -> false.
+     */
+    @Test
+    public void testEqualsDifferentType() {
+        Polynomial p = this.createPoly(0, 1.0);
+        String other = "not a polynomial";
+
+        assertEquals(false, p.equals(other));
+    }
+
+    /**
+     * Test equals: coefficients equal within EPS tolerance.
+     */
+    @Test
+    public void testEqualsEpsTolerance() {
+        Polynomial p1 = this.createPoly(1, 1.000000001);
+        Polynomial p2 = this.createPoly(1, 1.000000002);
+
+        assertEquals(true, p1.equals(p2)); // within EPS
     }
 
 }

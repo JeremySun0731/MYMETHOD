@@ -4,34 +4,30 @@ import components.map.Map;
 import components.map.Map1L;
 
 /**
- * Kernel implementation for the Polynomial component using a Map-based
- * representation. The keys represent degrees (non-negative integers), and
- * values represent coefficients (real numbers). Duplicate degrees are not
- * allowed, and only non-zero terms are stored.
+ * Implementation of the {@code Polynomial} component using a sparse
+ * {@code Map<Integer, Double>} representation in which each key represents an
+ * integer degree (positive, zero, or negative) and each value is a non-zero
+ * real coefficient.
  *
- * @mathdefinitions <pre>
- * maxDegree(p: polynomial of real numbers) =
- *  if p = 0 then 0
- * else max({ d in Z | coefficient(p, d) ≠ 0 })
+ * <p>
+ * Only terms with non-zero coefficients are stored. This representation is
+ * efficient for sparse polynomials whose degrees may be far apart.
+ * </p>
+ *
+ * <p>
+ * The abstraction of this component is defined in {@code Polynomial},
+ * {@code PolynomialKernel}, and {@code PolynomialSecondary}. This class
+ * provides the concrete data representation and implements the required kernel
+ * and secondary operations.
+ * </p>
+ *
+ * @correspondence <pre>
+ * this = Σ (rep.get(d) * x^d), ranging over all keys d in rep
  * </pre>
- * @fields rep map from degrees to coefficients
- * @structure Map<Integer, Double>
- * @domain rep.keys = {d in Z | coefficient(this, d) ≠ 0} rep.values =
- *         {coefficient(this, d) | d in rep.keys}
- * @bounds |rep| <= number of non-zero terms in the polynomial
- * @initially this = 0
- * @constraints mutable, finite
- * @strengths Representation is efficient for sparse polynomials with
- *            non-contiguous degrees.
- * @weaknesses Operations that require iterating through all degrees may be less
- *             efficient due to the map structure.
- * @convention Keys (degrees) may be any integer, including negative;
- *             coefficients are non-zero real numbers.
  *
  * @author Jeremy Sun
- *
- * @correspondence this = Σ (rep.get(d) * x^d) for all degrees d in rep.
  */
+
 public class Polynomial1L extends PolynomialSecondary {
     /**
      * Representation of the polynomial.
@@ -39,9 +35,7 @@ public class Polynomial1L extends PolynomialSecondary {
     private Map<Integer, Double> rep;
 
     /**
-     * Creates a new empty polynomial.
-     *
-     * @ensures this = 0
+     * No-argument constructor.
      */
     public Polynomial1L() {
         // initialize representation
@@ -115,9 +109,12 @@ public class Polynomial1L extends PolynomialSecondary {
 
     @Override
     public final int getMinDegree() {
+        // iterate through the map to find the minimum degree
         int result = 0;
         boolean first = true;
+        // initialize result with the first key
         for (Map.Pair<Integer, Double> pair : this.rep) {
+            // on the first iteration, set result to the first key
             if (first) {
                 result = pair.key();
                 first = false;

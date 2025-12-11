@@ -5,13 +5,6 @@ package components.polynomial;
  * such as addition, multiplication, differentiation, and integration.
  */
 public abstract class PolynomialSecondary implements Polynomial {
-    /**
-     * Returns a new polynomial that is the sum of this polynomial and p.
-     *
-     * @param p
-     *            the polynomial to add; must not be null
-     * @return a new Polynomial that is the result of this + p
-     */
     @Override
     public Polynomial add(Polynomial p) {
         assert p != null : "Violation of: p is not null";
@@ -43,13 +36,6 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * Returns a new polynomial that is the difference of this polynomial and p.
-     *
-     * @param p
-     *            the polynomial to subtract; must not be null
-     * @return a new Polynomial that is the result of this - p
-     */
     @Override
     public Polynomial subtract(Polynomial p) {
         assert p != null : "Violation of: p is not null";
@@ -81,13 +67,6 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * Multiplies this polynomial with polynomial p and returns the result.
-     *
-     * @param p
-     *            the polynomial to multiply with (must not be null)
-     * @return a new polynomial that is the product of this and p
-     */
     @Override
     public Polynomial multiply(Polynomial p) {
         assert p != null : "Violation of: p is not null";
@@ -119,11 +98,6 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * Returns the derivative of this polynomial as a new polynomial.
-     *
-     * @return a new polynomial that is the derivative of this one
-     */
     @Override
     public Polynomial derivative() {
         Polynomial result = this.newInstance();
@@ -132,8 +106,8 @@ public abstract class PolynomialSecondary implements Polynomial {
         for (int degree = this.getMinDegree(); degree <= this
                 .getDegree(); degree++) {
             double coef = this.getCoefficient(degree);
-            // only differentiate non-zero terms with degree > 0
-            if (coef != 0 && degree > 0) {
+            // only differentiate non-zero terms with degree != 0
+            if (coef != 0 && degree != 0) {
                 double newCoef = coef * degree;
                 // only set if newCoef is not zero
                 if (newCoef != 0) {
@@ -145,12 +119,6 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * Returns the indefinite integral of this polynomial as a new polynomial.
-     * The constant of integration is assumed to be 0.
-     *
-     * @return a new polynomial that is the integral of this one
-     */
     @Override
     public Polynomial integrate() {
         Polynomial result = this.newInstance();
@@ -180,13 +148,7 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * Evaluates this polynomial at the given value of x.
-     *
-     * @param x
-     *            the value at which to evaluate this polynomial
-     * @return the result of f(x)
-     */
+    @Override
     public double evaluate(double x) {
         double result = 0.0;
 
@@ -201,11 +163,7 @@ public abstract class PolynomialSecondary implements Polynomial {
         return result;
     }
 
-    /**
-     * check whether the polynomial is zero polynomial.
-     *
-     * @return true if the polynomial is zero polynomial, false otherwise
-     */
+    @Override
     public boolean isZero() {
         boolean zero = true;
         for (int i = this.getMinDegree(); i <= this.getDegree(); i++) {
@@ -217,23 +175,23 @@ public abstract class PolynomialSecondary implements Polynomial {
         return zero;
     }
 
-    /**
-     * Returns a new polynomial that is this polynomial scaled by the constant
-     * c.
-     *
-     * @param c
-     *            the constant to scale by
-     * @return a new Polynomial that is c * this
-     */
+    @Override
     public Polynomial scale(double c) {
         Polynomial result = this.newInstance();
         result.clear();
+        // scale each term
+        if (c != 0.0) {
+            for (int degree = this.getMinDegree(); degree <= this
+                    .getDegree(); degree++) {
+                double coef = this.getCoefficient(degree);
 
-        for (int degree = this.getMinDegree(); degree <= this
-                .getDegree(); degree++) {
-            double coef = this.getCoefficient(degree);
-            if (coef != 0.0) {
-                result.setCoefficient(degree, coef * c);
+                if (coef != 0.0) {
+                    double newCoef = coef * c;
+
+                    if (newCoef != 0.0) { // should always be true unless c is 0
+                        result.setCoefficient(degree, newCoef);
+                    }
+                }
             }
         }
 
@@ -241,34 +199,54 @@ public abstract class PolynomialSecondary implements Polynomial {
     }
 
     /**
-     * Returns a string representation of the polynomial.
+     * Returns a string representation of this polynomial.
      */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        boolean firstTerm = true;
-        for (int i = this.getDegree(); i >= this.getMinDegree(); i--) {
-            double coeff = this.getCoefficient(i);
-            if (coeff != 0) {
-                if (!firstTerm) {
-                    sb.append(coeff > 0 ? " + " : " - ");
-                } else if (coeff < 0) {
-                    sb.append("-");
-                }
-                double absCoeff = Math.abs(coeff);
-                if (i == 0 || absCoeff != 1) {
-                    sb.append(absCoeff);
-                }
-                if (i > 0) {
-                    sb.append("x");
-                    if (i > 1) {
-                        sb.append("^").append(i);
+        boolean isFirst = true;
+
+        for (int deg = this.getDegree(); deg >= this.getMinDegree(); deg--) {
+            double coef = this.getCoefficient(deg);
+
+            if (coef != 0.0) {
+
+                if (isFirst) {
+                    if (coef < 0) {
+                        sb.append("-");
+                    }
+                } else {
+                    if (coef < 0) {
+                        sb.append(" - ");
+                    } else {
+                        sb.append(" + ");
                     }
                 }
-                firstTerm = false;
+
+                double absCoef = Math.abs(coef);
+
+                if (deg == 0) {
+                    sb.append(absCoef);
+                } else {
+                    if (absCoef != 1.0) {
+                        sb.append(absCoef);
+                    }
+
+                    sb.append("x");
+
+                    if (deg > 1) {
+                        sb.append("^");
+                        sb.append(deg);
+                    }
+                }
+
+                isFirst = false;
             }
         }
-        return sb.length() == 0 ? "0" : sb.toString();
+        if (sb.length() == 0) {
+            sb.append("0");
+        }
+        return sb.toString();
     }
 
     /**
